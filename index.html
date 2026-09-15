@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>SHIFT — حصة الكويت</title>
+<style>
+  :root{ --bg:#F2E3C9; --ink:#1E3348; --paper:#FBF6EC; --line:#D9C6A5; --palm:#1F5B3A; }
+  *{ box-sizing:border-box }
+  body{ margin:0; min-height:100dvh; background:var(--bg); color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif; display:grid; align-content:center; gap:18px;
+    padding:calc(env(safe-area-inset-top) + 24px) 20px calc(env(safe-area-inset-bottom) + 24px); }
+  h1{ font-size:22px; margin:0 0 4px; text-align:center }
+  p{ margin:0; text-align:center; font-size:15px; opacity:.85 }
+  a{ display:block; min-height:72px; display:flex; align-items:center; justify-content:center;
+     border-radius:18px; text-decoration:none; font-size:20px; font-weight:800; padding:14px;
+     border:2px solid var(--line); background:var(--paper); color:var(--ink); }
+  a.go{ background:var(--palm); border-color:var(--palm); color:#fff }
+  small{ display:block; text-align:center; font-size:13px; opacity:.7; line-height:1.7 }
+  small.hint{ margin-top:-10px }
+</style>
+</head>
+<body>
+  <h1>حصة الكويت — الصف الخامس</h1>
+  <p>الكرة الأرضية ومسطحاتها المائية</p>
+  <a class="go" href="display.html?solo=1">شغّل على هذا الجهاز</a>
+  <small class="hint">العرض ملء الشاشة والتحكّم لوحة تُخفى بضغطة — للمرآة بكابل أو AirPlay.</small>
+  <a href="teacher-live.html">صفحة التحكّم (شاشة منفصلة)</a>
+  <a href="display.html?live=1">شاشة الفصل</a>
+  <small>للشاشتين: افتح شاشة الفصل على حاسوب الفصل، وصفحة التحكّم في نافذة ثانية على الجهاز نفسه.<br>
+  بعد فتح الصفحات تعمل الحصة بلا إنترنت.</small>
+<script>
+if ('serviceWorker' in navigator) addEventListener('load', () => {
+  navigator.serviceWorker.register('sw.js').catch(e => console.warn('SHIFT: تعذّر تجهيز العمل بلا شبكة —', e && e.message));
+});
+</script>
+</body>
+</html>
