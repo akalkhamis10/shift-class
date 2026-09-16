@@ -1,5 +1,5 @@
-/* SHIFT — حصة صفّية · نسخة 122a2d19 */
-const CACHE = 'shift-class-122a2d19';
+/* SHIFT — حصة صفّية · نسخة be6a6f1d */
+const CACHE = 'shift-class-be6a6f1d';
 const FILES = ['./', './index.html', './play.html', './report.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', e => {

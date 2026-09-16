@@ -789,6 +789,11 @@ body.rp-page{ margin:0; background:var(--bg); }
    
   const shares = (a, vocabWords) => words(a).some(w => vocabWords.some(v => v.startsWith(w.slice(0, 3)) || w.startsWith(v.slice(0, 3))));
 
+  C.OUTSIDE_TRUE = ['أكبر جزيرة في العالم'];
+
+  C.ANTONYMS = [['أكبر', 'أصغر'], ['أكبر', 'أقل'], ['أكثر', 'أقل'], ['أكثر', 'أصغر'],
+                ['كبير', 'صغير'], ['أطول', 'أقصر']];
+
   C.questionIssues = lesson => {
     const out = [];
     const facts = {}; (lesson.facts || []).forEach(f => { facts[f.id] = f; });
@@ -818,6 +823,33 @@ body.rp-page{ margin:0; background:var(--bg); }
        
       if (factText.indexOf(norm(right)) < 0)
         out.push({ i, why: `${at}: الجواب «${right}» ليس في نصّ حقيقته ${q.from} — فالسؤال لا يقيس الدرس` });
+       
+      const others = (lesson.questions || []).filter((_, j) => j !== i)
+        .map(x => norm((x.q || '') + ' ' + ((x.options || [])[x.answer] || '')));
+      (q.options || []).forEach((o, k) => {
+        if (k === q.answer) return;
+        if (words(o).length < 2) return;
+        if (others.some(h => h.indexOf(norm(o)) >= 0))
+          out.push({ i, why: `${at}: المشتّت «${o}» محورُ سؤال آخر — يكشف نفسه` });
+      });
+
+      const stemW = words(q.q || '');
+      const hasStem = (list, w) => list.some(v => v.startsWith(w) || w.startsWith(v));
+      opts.forEach((o, k) => {
+        if (k === q.answer) return;
+        const on = norm(o);
+        const hit = C.OUTSIDE_TRUE.find(ph => on.indexOf(norm(ph)) >= 0);
+        if (hit) out.push({ i, why: `${at}: المشتّت «${o}» عبارة صحيحة خارج الدرس — نفيها يعلّم خطأ` });
+        const ow = words(o);
+        for (const [a, b] of C.ANTONYMS) {
+          const clash = (hasStem(stemW, a) && hasStem(ow, b)) || (hasStem(stemW, b) && hasStem(ow, a));
+          if (!clash) continue;
+           
+          const shared = ow.some(w => w.startsWith(a.slice(0, 3)) || w.startsWith(b.slice(0, 3)) ? false
+            : stemW.some(v => v.startsWith(w.slice(0, 3)) || w.startsWith(v.slice(0, 3))));
+          if (shared) out.push({ i, why: `${at}: المشتّت «${o}» يناقض نصّ السؤال — يُستبعد بلا معرفة` });
+        }
+      });
       opts.forEach((o, k) => {
         if (k === q.answer) return;
         if (digits(o)) return;                  
