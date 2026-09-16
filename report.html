@@ -559,8 +559,10 @@ body.pg{ margin:0; height:100dvh; background:var(--bg); overflow:hidden; }
 body.ref #pw{ height:100dvh; display:grid; grid-template-rows:minmax(0, 1fr) auto; }
 body.pg .tv, body.pg .tr{ position:relative; inset:auto; height:100%; min-height:0; }
 
-body.pg .tv-safe{ grid-template-columns:minmax(0, 1fr); gap:.4em;
-  padding:calc(.6em + var(--sa-t)) calc(.9em + var(--sa-r)) calc(.6em + var(--sa-b)) calc(.9em + var(--sa-l)); }
+body.pg .tv-safe{ grid-template-columns:minmax(0, 1fr); gap:.4em; padding:.6em .9em; }
+
+body.pg .tv-top{ padding-block-start:var(--sa-t); }
+body.pg .tv-foot{ padding-block-end:var(--sa-b); }
 
 body.pg .tv-foot{ padding-inline-start:56px; }
 body.pg .tv-safe *{ min-width:0; }
@@ -595,18 +597,10 @@ body.pg .tv-pick{ margin-block-start:.08em; font-size:var(--tv-label); }
   body.pg .tv-score .nm{ white-space:nowrap; }
 }
 
-.tv-rot{ display:none; }
-@media (orientation: portrait){
-  
-  .tv-rot{ display:block; font-size:var(--tv-label); font-weight:700; color:var(--ink);
-    text-align:center; margin:0 0 .15em; }
-}
-
 @media (orientation: portrait) and (max-width: 560px){
   body.pg .tv-figure, body.pg .tv-figure2{ display:none; }
 }
-
-body.pg button.tv-opt{ min-height:max(44px, 1.5em); height:auto; max-height:none; }
+body.pg button.tv-opt{ min-height:max(44px, 1.5em); }
 body.pg .tv-opts{ gap:.22em; }
 body.pg .tv-pick{ margin-block:.1em; }
 body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
@@ -614,7 +608,7 @@ body.pg .tv-crumb{ display:none; }
 
 body.pg .tv-foot{ flex-wrap:nowrap; max-height:none; row-gap:.25em; }
 
-.pm-open{ position:fixed; inset-block-end:calc(env(safe-area-inset-bottom) + 8px);
+.pm-open{ position:fixed; inset-block-end:calc(var(--sa-b) + 8px);
   inset-inline-start:8px; z-index:30; width:44px; height:44px; border-radius:999px;
   border:0; background:transparent; color:var(--ink2);
   font-family:var(--font-text); font-size:19px; font-weight:800; line-height:1; cursor:pointer;
@@ -623,6 +617,7 @@ body.pg .tv-foot{ flex-wrap:nowrap; max-height:none; row-gap:.25em; }
 .pm-open.press{ transform:scale(.94); opacity:.9; }
 .pm[hidden]{ display:none; }
 
+.pm{ position:fixed; inset-block-end:calc(var(--sa-b) + 60px);
   inset-inline-start:10px; z-index:31; display:grid; gap:6px; min-width:196px;
   background:var(--ink); border:2px solid var(--ink); border-radius:var(--r-card);
   padding:10px; box-shadow:0 8px 28px rgba(0,0,0,.28); }
