@@ -202,7 +202,7 @@
   .tv-crumb{ display:none; }
   
   .tv-safe *{ min-width:0; }
-  .tv-cards, .tv-faceup, .tv-pairs, .tr-inner{
+  .tv-cards, .tv-pairs, .tr-inner{
     max-width:min(100%, 26em); margin-inline:auto; }
   
 }
@@ -433,33 +433,28 @@
 
 .tv-q-sm{ font-size:1.25em; max-width:22em; margin:0; }
 
-.tv-cards{ display:grid; gap:.3em; width:100%; max-width:24em;
-  grid-template-columns:repeat(var(--cols, 5), 1fr); }
+.tv-match .tv-stage{ grid-template-columns:min(100%, 34em); }
+
+.tv-cards{ display:grid; gap:.3em; width:100%;
+  grid-template-columns:repeat(auto-fit, minmax(min(100%, 11em), 1fr)); }
+
 .tv-card{
-  aspect-ratio:1; border-radius:var(--r-card);
-  background:var(--ink); border:.08em solid var(--ink);
-  display:grid; place-items:center; gap:.1em; padding:.25em;
-  text-align:center; line-height:var(--lh-tight);
+  border-radius:var(--r-card); min-height:44px;
+  background:var(--ink); border:.12em solid var(--ink);
+  display:flex; align-items:center; justify-content:flex-start; gap:.4em; padding:.3em .5em;
+  text-align:start; line-height:var(--lh-tight);
   transition:background-color 200ms cubic-bezier(.2,.8,.3,1), transform 200ms cubic-bezier(.2,.8,.3,1);
 }
 
-.tv-card .k{ font-size:var(--tv-label); font-weight:800; color:var(--paper); }
+.tv-card .k{ font-size:var(--tv-label); font-weight:800; color:var(--paper);
+  flex:none; opacity:.65; }
+.tv-card .t{ font-size:var(--tv-label); font-weight:800; color:var(--paper);
+  flex:1 1 auto; min-width:0; overflow-wrap:anywhere; }
+.tv-card .mk{ font-size:var(--tv-label); font-weight:800; color:var(--sadu2); flex:none; }
 
-.tv-faceup{ font-size:var(--tv-answer); font-weight:800; color:var(--ink); margin:.15em 0 0;
-  max-width:26em; text-align:center; line-height:var(--lh-tight); }
-.tv-faceup b{ display:inline-grid; place-items:center; width:1.3em; height:1.3em; border-radius:50%;
-  background:var(--ink); color:var(--paper); font-size:.8em; margin-inline-end:.2em; vertical-align:middle; }
-.tv-card[data-state="up"],.tv-card[data-state="done"]{ background:var(--paper); border-color:var(--line); }
-.tv-card[data-state="up"] .k,.tv-card[data-state="done"] .k{ color:var(--ink); }
-.tv-card[data-state="done"]{ background:var(--palm-soft); border-color:var(--palm2); }
-.tv-card[data-state="up"]{ transform:scale(1.04); }
-
-.tv-card[data-state="wrong"]{ background:var(--sadu-soft); border-color:var(--sadu2); transform:scale(1.04); }
-.tv-card[data-state="wrong"] .k{ color:var(--sadu-ink); }
-.tv-faceup[data-v="wrong"]{ color:var(--sadu-ink); }
-.tv-faceup[data-v="wrong"] b{ background:var(--sadu2); color:#fff; }
-.tv-faceup[data-v="right"]{ color:var(--palm-ink); }
-.tv-faceup .mk{ font-weight:800; }
+.tv-card[data-state="up"]{ border-color:var(--paper); transform:scale(1.03); }
+.tv-card[data-state="done"]{ background:var(--palm2); border-color:var(--palm2); }
+.tv-card[data-state="wrong"]{ border-color:var(--sadu2); transform:scale(1.03); }
 
 .tv-pairs{ display:grid; gap:.12em; width:100%; max-width:26em; margin:.2em 0 0; }
 .tv-pair{ display:flex; align-items:baseline; gap:.3em; margin:0; padding:.12em .5em;
@@ -580,12 +575,10 @@ body.pg .tv-top{ padding-block-start:var(--sa-t); }
 body.pg .tv-foot{ padding-block-end:var(--sa-b); }
 body.pg .tv-safe *{ min-width:0; }
 
-body.pg .tv-faceup, body.pg .tv-pairs,
+body.pg .tv-pairs,
 body.pg .tr-inner{ max-width:min(100%, 26em); margin-inline:auto; }
 
-body.pg .tv-cards{ max-width:min(100%, 17em); margin-inline:auto; }
-body.pg .tv-faceup{ margin-block:.05em; font-size:var(--tv-label); }
-body.pg .tv-faceup b{ font-size:1em; width:1.15em; height:1.15em; }
+body.pg .tv-cards{ margin-inline:auto; }
 body.pg .tv-pairs{ margin-block-start:.1em; }
 
 body.pg .tv-q{ flex:none; }
@@ -615,6 +608,8 @@ body.pg .tv-pick{ margin-block:0; font-size:var(--tv-label); }
   body.pg .tv-opts{ gap:.3em; }
   body.pg .tv-opt{ padding-block:.05em; }
   body.pg .tv-pick{ margin-block:0; }
+  
+  body.pg .tv-cards{ gap:.12em; }
   
   body.pg .tv-safe{ --tv-col:26em; }
   body.pg .tv-stage{ gap:.5em; }
@@ -1035,10 +1030,9 @@ body.rp-page{ margin:0; background:var(--bg); }
     const cards = vm.cards || [];
     const matched = vm.matched || [];
      
-    const cols = vm.cols || Math.max(1, Math.ceil((cards.length + matched.length * 2) / 2));
-     
     const st = c => (vm.moment === 'wrong' && (c.state || '') === 'up') ? 'wrong' : (c.state || 'down');
-    root.className = 'tv ds';
+     
+    root.className = 'tv ds tv-match';
     root.innerHTML = `<div class="tv-safe">
       <div class="tv-top">
         <span class="tv-crumb">${esc(NUM(vm.crumb || ''))}</span>
@@ -1047,17 +1041,16 @@ body.rp-page{ margin:0; background:var(--bg); }
       </div>
       <div class="tv-stage">
         ${vm.q ? `<h1 class="tv-q tv-q-sm">${esc(NUM(vm.q))}</h1>` : ''}
-        ${cards.length ? `<div class="tv-cards" style="--cols:${cols}">${cards.map((c, i) =>
+        ${cards.length ? `<div class="tv-cards">${cards.map((c, i) => {
            
-          (vm.pick
+          const inner = `<span class="k">${esc(c.key || KEY10[i])}</span>` +
+            `<span class="t">${esc(NUM(c.text || ''))}</span>` +
+            (st(c) === 'wrong' ? '<span class="mk">✗</span>' : '');
+          return vm.pick
             ? `<button class="tv-card" data-state="${esc(st(c))}" data-a="flip" data-i="${esc(String(c.idx != null ? c.idx : i))}"` +
-              `${st(c) === 'done' ? ' disabled' : ''}><span class="k">${esc(c.key || KEY10[i])}</span></button>`
-            : `<div class="tv-card" data-state="${esc(st(c))}"><span class="k">${esc(c.key || KEY10[i])}</span></div>`)
-        ).join('')}</div>` : ''}
-        ${ 
-          ((vm.faceUp || []).length && vm.moment !== 'right') ? `<p class="tv-faceup" data-v="${esc(vm.moment === 'wrong' ? 'wrong' : (vm.moment === 'right' ? 'right' : ''))}">${
-          vm.moment === 'wrong' ? '<span class="mk">✗</span> ' : (vm.moment === 'right' ? '<span class="mk">✓</span> ' : '')
-        }${(vm.faceUp || []).map(f => `<b>${esc(f.key)}</b> ${esc(NUM(f.text))}`).join(' · ')}</p>` : ''}
+              `${st(c) === 'done' ? ' disabled' : ''}>${inner}</button>`
+            : `<div class="tv-card" data-state="${esc(st(c))}">${inner}</div>`;
+        }).join('')}</div>` : ''}
         ${matched.length ? `<div class="tv-pairs">${matched.map(m =>
           `<p class="tv-pair"><b>✓</b><span class="a">${esc(NUM(m.a || ''))}</span>` +
           `<span class="d">${esc(NUM(m.b || ''))}</span></p>`).join('')}</div>` : ''}
@@ -1422,7 +1415,6 @@ body.rp-page{ margin:0; background:var(--bg); }
             step: TV.matchStep(found.length, cards.length / 2),
             turn: { name: 'دور ' + team().name, color: team().color },
             q: C.MAP.match.lead,
-            cols: Math.ceil(cards.length / 2),
             cards: left.map(c => ({ text: c.t, key: SHIFT.tv.KEY10[c.idx], idx: c.idx,
               state: up.includes(c.idx) ? 'up' : 'down' })),
             matched: found.map(pid => {
@@ -1431,7 +1423,6 @@ body.rp-page{ margin:0; background:var(--bg); }
               const b = two.find(c => c !== a) || {};
               return { a: a.t, b: b.t };
             }),
-            faceUp: up.map(i => ({ key: SHIFT.tv.KEY10[i], text: (cards[i] || {}).t })),
             scores,
             moment: S.judged === 'right' ? 'right' : (S.judged === 'wrong' ? 'wrong' : 'ask'),
           });
@@ -1572,11 +1563,10 @@ body.rp-page{ margin:0; background:var(--bg); }
       pairs.forEach((pr, i) => { cards.push({ p: i, t: pr.a }); cards.push({ p: i, t: pr.b }); });
       return (SHIFT.tv.renderMatch(root, {
         crumb: lesson.title, step: SHIFT.tv.matchStep(1, pairs.length),
-        turn: { name: 'دور اللؤلؤ', color: 'var(--t1)' }, q: SHIFT.contract.MAP.match.lead, cols: 5,
+        turn: { name: 'دور اللؤلؤ', color: 'var(--t1)' }, q: SHIFT.contract.MAP.match.lead,
         cards: cards.slice(0, 2).concat(cards.slice(4)).map((c, i) => ({ text: c.t,
           key: SHIFT.tv.KEY10[i < 2 ? i : i + 2], state: i < 2 ? 'up' : 'down' })),
         matched: [{ a: pairs[1].a, b: pairs[1].b }],
-        faceUp: cards.slice(0, 2).map((c, i) => ({ key: SHIFT.tv.KEY10[i], text: c.t })),
         scores: TEAMS.map((t, i) => Object.assign({}, t, { now: i === 0 })),
         moment: screen === 'match-wrong' ? 'wrong' : 'ask',
       }), acts('التالي'));
