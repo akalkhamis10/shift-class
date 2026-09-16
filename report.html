@@ -965,7 +965,7 @@ body.rp-page{ margin:0; background:var(--bg); }
   TV.count = (n, surface) => (Number(n) > 0 ? NUM(n, surface) : '—');
    
   TV.matchStep = (found, total, surface) => (Number(found) > 0
-    ? 'طوبِقَ ' + NUM(found, surface) + ' من ' + NUM(total, surface)
+    ? NUM(found, surface) + ' من ' + NUM(total, surface)
      
     : 'لم تُطابَق بعد — ' + NUM(total, surface) + ' أزواج');
 
