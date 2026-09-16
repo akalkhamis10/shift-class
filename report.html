@@ -181,7 +181,8 @@
   container-type:size;
   position:relative; overflow:hidden;    
   font-size:var(--tv-root);              
-  display:grid; grid-template-rows:auto minmax(0, 1fr) auto;   
+  
+  display:flex; flex-direction:column;
   gap:.5em; padding:.75em 1em;
 }
 
@@ -192,17 +193,14 @@
   
   .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
   .tv-crumb{ display:none; }
-  .tv-foot{ flex-wrap:wrap; max-height:none; row-gap:.25em; }
-  .tv-score{ flex:none; }
   
   .tv-safe *{ min-width:0; }
   .tv-opts, .tv-cards, .tv-faceup, .tv-pairs, .tv-q, .tr-inner, .tv-pick{
     max-width:min(100%, 26em); margin-inline:auto; }
   
-  .tv-safe{ grid-template-columns:minmax(0, 1fr); }
 }
 
-.tv-top{ display:flex; align-items:center; justify-content:space-between; gap:.6em;
+.tv-top{ flex:none; display:flex; align-items:center; justify-content:space-between; gap:.6em;
   min-height:1.6em; max-height:2em; flex-wrap:nowrap; }
 
 .tv-crumb{ font-size:var(--tv-label); color:var(--ink); font-weight:600;
@@ -214,11 +212,15 @@
 }
 .tv-turn i{ width:.6em; height:.6em; border-radius:50%; background:var(--t1); display:inline-block; }
 
-.tv-stage{ display:grid; align-content:center; justify-items:center; gap:.45em; text-align:center;
-  min-height:0; overflow:hidden; }
+.tv-stage{ flex:1 1 auto; display:grid; align-content:center; justify-items:center; gap:1em;
+  text-align:center; min-height:0; overflow:hidden; padding-inline:.3em; }
+
+.tv-stage + .tv-foot{ margin-block-start:16px; }
 .tv-q{
   font-family:var(--font-display); font-size:var(--tv-question); line-height:var(--lh-tight);
   color:var(--ink); max-width:14em; text-wrap:balance;
+  
+  margin:0;
 }
 
 .tv-opts{ display:grid; gap:.4em; width:100%; max-width:26em; }
@@ -252,20 +254,24 @@
 .tv-opt[data-state="wrong"]{ background:var(--sadu-soft); color:var(--sadu-ink); border-color:var(--sadu2); }
 .tv-opt[data-state="wrong"] .k{ background:var(--sadu2); color:#fff; }
 
-.tv-foot{ display:flex; align-items:center; justify-content:center; gap:.5em; flex-wrap:nowrap;
-  min-height:1.6em; max-height:2.1em; }
+.tv-foot{ flex:none; display:flex; align-items:center; justify-content:center;
+  flex-wrap:wrap; column-gap:16px; row-gap:.3em; min-height:1.6em; }
+
+.tv-teams{ display:flex; flex-wrap:nowrap; align-items:center; gap:.4em; }
 .tv-score{
+  flex:none;
   font-size:var(--tv-label); font-weight:800;
   background:var(--paper); border:.08em solid var(--line); border-radius:var(--r-chip);
-  padding:.14em .3em .14em .8em; display:inline-flex; align-items:center; gap:.45em; color:var(--ink);
+  padding:.14em .3em .14em .45em; display:inline-flex; align-items:center; gap:.45em; color:var(--ink);
 }
 
-.tv-score .nm{ font-size:var(--tv-label); font-weight:700; }
+.tv-score .nm{ font-size:var(--tv-label); font-weight:700;
+  flex:none; min-width:max-content; white-space:nowrap; }
 
 .tv-score .n{
   min-width:1.7em; height:1.7em; padding:0 .25em; border-radius:999px;
   background:var(--ink); color:var(--paper); font-size:1.18em; font-weight:800;
-  display:inline-grid; place-items:center;
+  display:inline-grid; place-items:center; flex:none;
 }
 .tv-score i{ width:.55em; height:.55em; border-radius:50%; display:inline-block; }
 .tv-score[data-now="1"]{ border-color:var(--ink); box-shadow:0 0 0 .08em var(--ink); }
@@ -273,7 +279,8 @@
 .tv-figure{
   
   position:absolute; inset-block-start:13%; inset-inline-start:2.5%;
-  height:24%; pointer-events:none; z-index:0;
+  
+  height:20%; pointer-events:none; z-index:0;
   animation:tv-enter 250ms cubic-bezier(.2,.8,.3,1) both;
 }
 .tv-figure img{ filter:drop-shadow(0 .06em 0 var(--shade-soft)); }
@@ -459,7 +466,7 @@
 .tv-win .tv-q{ font-size:2.1em; margin:0; }
 .tv-winline{ font-size:var(--tv-answer); font-weight:700; color:var(--ink); margin:.1em 0 .2em; }
 
-.tv-win .tv-foot{ margin:.15em 0 0; }
+.tv-win .tv-stage .tv-foot{ margin:.15em 0 0; }
 .tv-win .tv-stage{ gap:.2em; }
 
 .tv-winblock{ display:flex; align-items:center; justify-content:center; gap:.8em; width:100%;
@@ -527,7 +534,6 @@
 
 .tr-inner{ display:grid; gap:.6em; justify-items:center; text-align:center; align-content:center;
   min-height:0; overflow:hidden; }
-.tr-inner .tv-acts{ position:static; margin-block-start:.5em; justify-content:center; }
 .tr-eyebrow{ font-size:var(--tv-label); font-weight:700; color:var(--ink); opacity:.85; margin:0; }
 .tr-obj{ font-family:var(--font-display); font-size:1.8em; line-height:var(--lh-tight);
   color:var(--ink); margin:0; max-width:16em; text-wrap:balance; }
@@ -559,12 +565,10 @@ body.pg{ margin:0; height:100dvh; background:var(--bg); overflow:hidden; }
 body.ref #pw{ height:100dvh; display:grid; grid-template-rows:minmax(0, 1fr) auto; }
 body.pg .tv, body.pg .tr{ position:relative; inset:auto; height:100%; min-height:0; }
 
-body.pg .tv-safe{ grid-template-columns:minmax(0, 1fr); gap:.4em; padding:.6em .9em; }
+body.pg .tv-safe{ gap:.4em; padding:.6em .9em; }
 
 body.pg .tv-top{ padding-block-start:var(--sa-t); }
 body.pg .tv-foot{ padding-block-end:var(--sa-b); }
-
-body.pg .tv-foot{ padding-inline-start:56px; }
 body.pg .tv-safe *{ min-width:0; }
 
 body.pg .tv-opts, body.pg .tv-faceup, body.pg .tv-pairs,
@@ -592,9 +596,18 @@ body.pg .tv-pick{ margin-block-start:.08em; font-size:var(--tv-label); }
   body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
   body.pg .tv-crumb{ display:none; }
   
-  body.pg .tv-foot{ flex-wrap:nowrap; max-height:none; gap:.25em; }
-  body.pg .tv-score{ flex:0 1 auto; min-width:0; padding-inline:.35em; }
-  body.pg .tv-score .nm{ white-space:nowrap; }
+  body.pg .tv-foot{ column-gap:16px; row-gap:.25em; }
+  
+  body.pg .tv-teams{ gap:.25em; }
+  body.pg .tv-score{ padding-inline:.3em; }
+}
+
+@media (max-height: 420px){
+  body.pg .tv-safe{ padding-block:.25em; gap:.18em; }
+  
+  body.pg .tv-stage{ gap:.6em; }
+  body.pg .tv-opts{ gap:.16em; }
+  body.pg .tr-inner{ gap:.25em; }
 }
 
 @media (orientation: portrait) and (max-width: 560px){
@@ -606,10 +619,7 @@ body.pg .tv-pick{ margin-block:.1em; }
 body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
 body.pg .tv-crumb{ display:none; }
 
-body.pg .tv-foot{ flex-wrap:nowrap; max-height:none; row-gap:.25em; }
-
-.pm-open{ position:fixed; inset-block-end:calc(var(--sa-b) + 8px);
-  inset-inline-start:8px; z-index:30; width:44px; height:44px; border-radius:999px;
+.pm-open{ flex:none; width:44px; height:44px; border-radius:999px;
   border:0; background:transparent; color:var(--ink2);
   font-family:var(--font-text); font-size:19px; font-weight:800; line-height:1; cursor:pointer;
   opacity:.4; transition:opacity 150ms, transform 90ms cubic-bezier(.2,.8,.3,1); }
@@ -628,9 +638,7 @@ body.pg .tv-foot{ flex-wrap:nowrap; max-height:none; row-gap:.25em; }
 .pm-item.pm-x{ background:none; color:var(--paper); border-color:rgba(251,246,236,.45);
   font-weight:700; font-size:15px; min-height:44px; }
 
-.tv-stage{ position:relative; }
-
-.tv-acts{ position:absolute; inset-block-end:0; inset-inline-end:0; display:flex; gap:.4em; align-items:center; }
+.tv-acts{ display:flex; gap:.4em; align-items:center; flex:none; }
 .tv-next{ min-height:max(44px, 1.3em);
   font-family:var(--font-text); font-size:.72em; font-weight:800;
   background:var(--paper); color:var(--ink); border:.08em solid var(--ink);
@@ -961,13 +969,13 @@ body.rp-page{ margin:0; background:var(--bg); }
         ).join('')}</div>` : ''}
         ${vm.pickLine ? `<p class="tv-pick">${esc(vm.pickLine)}</p>` : ''}
       </div>
-      <div class="tv-foot">${scores.map(s =>
+      <div class="tv-foot"><div class="tv-teams">${scores.map(s =>
          
         `<span class="tv-score"${s.now ? ' data-now="1"' : ''}>` +
         `<i style="background:${esc(s.color || 'var(--t1)')}"></i>` +
         `<span class="nm">${esc(s.name)}</span>` +
         `<b class="n">${TV.count(s.score)}</b></span>`
-      ).join('')}</div>
+      ).join('')}</div></div>
       ${vm.figure ? `<div class="tv-figure" data-moment="${esc(vm.moment || '')}"><img src="${esc(vm.figure)}" alt=""></div>` : ''}
     </div>`;
     return root;
@@ -1013,12 +1021,12 @@ body.rp-page{ margin:0; background:var(--bg); }
           `<span class="d">${esc(NUM(m.b || ''))}</span></p>`).join('')}</div>` : ''}
         ${vm.pickLine ? `<p class="tv-pick">${esc(vm.pickLine)}</p>` : ''}
       </div>
-      <div class="tv-foot">${(vm.scores || []).map(s =>
+      <div class="tv-foot"><div class="tv-teams">${(vm.scores || []).map(s =>
         `<span class="tv-score"${s.now ? ' data-now="1"' : ''}>` +
         `<i style="background:${esc(s.color || 'var(--t1)')}"></i>` +
         `<span class="nm">${esc(s.name)}</span>` +
         `<b class="n">${TV.count(s.score)}</b></span>`
-      ).join('')}</div>
+      ).join('')}</div></div>
       ${vm.figure ? `<div class="tv-figure" data-moment="${esc(vm.moment || '')}"><img src="${esc(vm.figure)}" alt=""></div>` : ''}
     </div>`;
     return root;
@@ -1052,7 +1060,7 @@ body.rp-page{ margin:0; background:var(--bg); }
     root.className = 'tv ds';
      
     root.innerHTML = `<div class="tv-safe tv-win">
-      <div></div>
+      <div class="tv-top"></div>
       <div class="tv-stage">
         <div class="tv-winblock">
           <img class="tv-winfig" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="">
@@ -1062,14 +1070,14 @@ body.rp-page{ margin:0; background:var(--bg); }
           </div>
           <img class="tv-winfig" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="">
         </div>
-        <div class="tv-foot">${(vm.scores || []).map(s =>
+        <div class="tv-foot"><div class="tv-teams">${(vm.scores || []).map(s =>
           `<span class="tv-score"${s.top ? ' data-now="1"' : ''}>` +
           `<i style="background:${esc(s.color || 'var(--t1)')}"></i>` +
           `<span class="nm">${esc(s.name)}</span>` +
           `<b class="n">${TV.count(s.score)}</b></span>`
-        ).join('')}</div>
+        ).join('')}</div></div>
       </div>
-      <div></div>
+      <div class="tv-foot"></div>
     </div>`;
     return root;
   };
@@ -1172,7 +1180,7 @@ body.rp-page{ margin:0; background:var(--bg); }
       <p class="tr-do">${esc(N(TV.actionLine(r)))}</p>`;
     root.innerHTML = surface === 'teacher'
       ? `<div class="tr-inner">${body}</div>`
-      : `<div class="tv-safe"><div></div><div class="tv-stage tr-inner">${body}</div><div></div></div>`;
+      : `<div class="tv-safe"><div class="tv-top"></div><div class="tv-stage tr-inner">${body}</div><div class="tv-foot"></div></div>`;
     return root;
   };
 
