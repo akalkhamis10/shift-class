@@ -436,7 +436,7 @@
 .tv-match .tv-stage{ grid-template-columns:min(100%, 34em); }
 
 .tv-cards{ display:grid; gap:.3em; width:100%;
-  grid-template-columns:repeat(auto-fit, minmax(min(100%, 11em), 1fr)); }
+  grid-template-columns:repeat(auto-fit, minmax(min(100%, 9.5em), 1fr)); }
 
 .tv-card{
   border-radius:var(--r-card); min-height:44px;
@@ -1564,9 +1564,9 @@ body.rp-page{ margin:0; background:var(--bg); }
       return (SHIFT.tv.renderMatch(root, {
         crumb: lesson.title, step: SHIFT.tv.matchStep(1, pairs.length),
         turn: { name: 'دور اللؤلؤ', color: 'var(--t1)' }, q: SHIFT.contract.MAP.match.lead,
-        cards: cards.slice(0, 2).concat(cards.slice(4)).map((c, i) => ({ text: c.t,
-          key: SHIFT.tv.KEY10[i < 2 ? i : i + 2], state: i < 2 ? 'up' : 'down' })),
-        matched: [{ a: pairs[1].a, b: pairs[1].b }],
+         
+        cards: cards.map((c, i) => ({ text: c.t, key: SHIFT.tv.KEY10[i], state: i < 2 ? 'up' : 'down' })),
+        matched: [],
         scores: TEAMS.map((t, i) => Object.assign({}, t, { now: i === 0 })),
         moment: screen === 'match-wrong' ? 'wrong' : 'ask',
       }), acts('التالي'));
