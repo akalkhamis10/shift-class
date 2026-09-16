@@ -640,6 +640,9 @@ body.pg .tv-crumb{ display:none; }
   font-family:var(--font-text); font-size:16px; font-weight:800; text-decoration:none;
   background:var(--paper); color:var(--ink); border:2px solid var(--paper);
   border-radius:var(--r-chip); padding:6px 12px; cursor:pointer; }
+
+.pm-seed{ font-family:var(--font-text); font-size:13px; font-weight:700; color:var(--paper);
+  opacity:.55; text-align:center; padding:2px 0; direction:ltr; unicode-bidi:plaintext; }
 .pm-item.pm-x{ background:none; color:var(--paper); border-color:rgba(251,246,236,.45);
   font-weight:700; font-size:15px; min-height:44px; }
 
@@ -1306,14 +1309,19 @@ body.rp-page{ margin:0; background:var(--bg); }
     const C = SHIFT.contract, TV = SHIFT.tv, host = SHIFT.host;
     const store = SHIFT.Store();
     const CRUMB = (lesson.title || 'الحصة');
-    const SEED = C.seedOf(lesson.lesson_id);
     const FAIR = C.fairPlan((lesson.questions || []).length, TEAMS.length);
 
-    const fresh = () => ({
-      lesson: lesson.lesson_id, crumb: CRUMB, round: 0, i: 0, phase: 'idle',
-      teams: TEAMS.map(t => Object.assign({ score: 0 }, t)), turn: 0, total: FAIR.play,
-      seed: SEED, qs: C.orderQuestions(lesson, SEED), picks: [],
-    });
+    const forcedSeed = null;
+    const newSeed = () => (Math.floor(Math.random() * 4294967296) >>> 0) || 1;
+
+    const fresh = () => {
+      const seed = forcedSeed != null ? forcedSeed : newSeed();
+      return {
+        lesson: lesson.lesson_id, crumb: CRUMB, round: 0, i: 0, phase: 'idle',
+        teams: TEAMS.map(t => Object.assign({ score: 0 }, t)), turn: 0, total: FAIR.play,
+        seed, qs: C.orderQuestions(lesson, seed), picks: [],
+      };
+    };
 
     let S = store.state;
     const ended = S && (S.screen === 'result' || S.screen === 'win');
@@ -1332,6 +1340,7 @@ body.rp-page{ margin:0; background:var(--bg); }
           <a class="pm-item" href="${host.ROUTES.hub}">لوحة الحصة</a>
           <button class="pm-item" data-a="result">النتيجة</button>
           <button class="pm-item" data-a="pause">أوقف</button>
+          <span class="pm-seed">بذرة الحصة: ${(S && S.seed) || '—'}</span>
           <button class="pm-item pm-x" data-a="menu">✕ إغلاق</button>
         </div>`;
       const pv = root.querySelector('#pv');
