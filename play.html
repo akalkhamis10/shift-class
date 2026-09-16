@@ -468,11 +468,11 @@
 @media (prefers-reduced-motion: reduce){ .tv-winblock{ animation-duration:1ms } }
 
 .hb{ min-height:100dvh; background:var(--bg); color:var(--ink); font-family:var(--font-text);
-  direction:rtl; display:grid; align-content:start; gap:18px; max-width:34em; margin-inline:auto;
-  padding:calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 28px); }
+  direction:rtl; display:grid; align-content:center; gap:18px; max-width:34em; margin-inline:auto;
+  padding:calc(env(safe-area-inset-top) + 26px) 16px calc(env(safe-area-inset-bottom) + 28px); }
 .hb *{ box-sizing:border-box; }
 
-.hb-logo{ height:44px; width:auto; display:block; margin-block-end:10px; }
+.hb-logo{ height:44px; width:auto; display:block; margin-block:6px 10px; }
 .sadu-band{ height:10px; border-radius:6px; margin-block-start:12px;
   background:repeating-linear-gradient(90deg,
     var(--sadu2) 0 14px, transparent 14px 20px, var(--gold2) 20px 34px, transparent 34px 40px); }
@@ -502,6 +502,9 @@
 .hb-btn{ min-height:52px; display:flex; align-items:center; justify-content:center;
   background:var(--bg); border:2px solid var(--ink); border-radius:var(--r-chip);
   color:var(--ink); font-size:16px; font-weight:800; text-decoration:none; padding:8px 10px; }
+.hb-alt{ min-height:48px; width:100%; font-family:var(--font-text); font-size:15px; font-weight:700;
+  background:none; color:var(--ink2); border:2px dashed var(--line); border-radius:var(--r-chip);
+  padding:8px 12px; cursor:pointer; }
 .hb-guide{ background:var(--paper); border:2px solid var(--line); border-radius:var(--r-card);
   padding:10px 14px; font-size:15px; }
 .hb-guide summary{ min-height:44px; display:flex; align-items:center; font-weight:800; cursor:pointer; }
@@ -580,10 +583,19 @@ body.pg .tv-pick{ margin-block-start:.08em; font-size:var(--tv-label); }
 @media (orientation: portrait), (max-height: 560px){
   body.pg .tv-safe{ aspect-ratio:auto; width:100%; height:100%;
     font-size:max(11px, min(4.44cqh, 4.4cqw)); }
+  
+  body.pg .tv-stage{ align-content:center; justify-items:center; }
   body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
   body.pg .tv-crumb{ display:none; }
   body.pg .tv-foot{ flex-wrap:wrap; max-height:none; row-gap:.25em; }
   body.pg .tv-score{ flex:none; }
+}
+
+@media (orientation: portrait) and (max-width: 560px){
+  body.pg .tv-figure, body.pg .tv-figure2{ display:none; }
+  
+  .pm-open{ inset-block-end:auto; inset-block-start:calc(env(safe-area-inset-top) + 8px); }
+  .pm{ inset-block-end:auto; inset-block-start:calc(env(safe-area-inset-top) + 64px); }
 }
 body.pg button.tv-opt{ min-height:max(44px, 1.5em); }
 body.pg .tv-opts{ gap:.22em; }
@@ -594,30 +606,38 @@ body.pg .tv-foot{ flex-wrap:wrap; max-height:none; row-gap:.25em; }
 body.pg .tv-score{ flex:none; }
 
 .pm-open{ position:fixed; inset-block-end:calc(env(safe-area-inset-bottom) + 10px);
-  inset-inline-start:10px; z-index:30; min-width:48px; min-height:48px; border-radius:999px;
+  inset-inline-start:10px; z-index:30; width:48px; height:48px; border-radius:999px;
   border:2px solid var(--line); background:var(--paper); color:var(--ink2);
   font-family:var(--font-text); font-size:20px; font-weight:800; line-height:1; cursor:pointer;
   opacity:.75; transition:transform 90ms cubic-bezier(.2,.8,.3,1), opacity 150ms; }
 .pm-open:hover{ opacity:1; }
 .pm-open.press{ transform:scale(.94); opacity:1; }
 .pm[hidden]{ display:none; }
+
 .pm{ position:fixed; inset-block-end:calc(env(safe-area-inset-bottom) + 66px);
-  inset-inline-start:10px; z-index:31; display:grid; gap:6px; min-width:180px;
-  background:var(--paper); border:2px solid var(--line); border-radius:var(--r-card);
-  padding:8px; box-shadow:0 6px 24px rgba(0,0,0,.18); }
+  inset-inline-start:10px; z-index:31; display:grid; gap:6px; min-width:196px;
+  background:var(--ink); border:2px solid var(--ink); border-radius:var(--r-card);
+  padding:10px; box-shadow:0 8px 28px rgba(0,0,0,.28); }
+.pm::before{ content:''; display:block; height:6px; border-radius:4px; margin-block-end:4px;
+  background:repeating-linear-gradient(90deg,
+    var(--sadu2) 0 10px, transparent 10px 14px, var(--gold2) 14px 24px, transparent 24px 28px); }
 .pm-item{ min-height:48px; display:flex; align-items:center; justify-content:center;
   font-family:var(--font-text); font-size:16px; font-weight:800; text-decoration:none;
-  background:var(--bg); color:var(--ink); border:2px solid var(--line);
+  background:var(--paper); color:var(--ink); border:2px solid var(--paper);
   border-radius:var(--r-chip); padding:6px 12px; cursor:pointer; }
-.pm-item.pm-x{ background:none; color:var(--ink2); font-weight:700; }
+.pm-item.pm-x{ background:none; color:var(--paper); border-color:rgba(251,246,236,.45);
+  font-weight:700; font-size:15px; min-height:44px; }
 
 .tv-stage{ position:relative; }
-.tv-next{ position:absolute; inset-block-end:0; inset-inline-start:0; min-height:max(44px, 1.3em);
+
+.tv-acts{ position:absolute; inset-block-end:0; inset-inline-end:0; display:flex; gap:.4em; align-items:center; }
+.tv-next{ min-height:max(44px, 1.3em);
   font-family:var(--font-text); font-size:.72em; font-weight:800;
   background:var(--paper); color:var(--ink); border:.08em solid var(--ink);
   border-radius:var(--r-card); padding:.25em 1.4em; cursor:pointer;
   box-shadow:0 .08em 0 var(--line); transition:transform 90ms cubic-bezier(.2,.8,.3,1); }
 .tv-next.press{ transform:scale(.97); }
+.tv-next2{ background:var(--bg); color:var(--ink2); border-color:var(--line); }
 
 .st-logo{ height:2.2em; width:auto; margin-block-end:.3em; }
 .tv-start .tv-q{ font-family:var(--font-display); max-width:18em; }
@@ -959,7 +979,8 @@ body.rp-page{ margin:0; background:var(--bg); }
    
   TV.matchStep = (found, total, surface) => (Number(found) > 0
     ? 'طوبِقَ ' + NUM(found, surface) + ' من ' + NUM(total, surface)
-    : 'لم تُطابَق بعد · ' + NUM(total, surface) + ' أزواج');
+     
+    : 'لم تُطابَق بعد — ' + NUM(total, surface) + ' أزواج');
 
   TV.renderMatch = function (root, vm) {
     vm = vm || {};
@@ -1166,6 +1187,7 @@ body.rp-page{ margin:0; background:var(--bg); }
 <script>
 (function () {
   const KEY = 'shift.session.v1';
+  const LAST = 'shift.session.last.v1';
 
   function read() {
     try { return JSON.parse(localStorage.getItem(KEY) || 'null'); }
@@ -1189,6 +1211,9 @@ body.rp-page{ margin:0; background:var(--bg); }
       return write(self.state);
     };
     self.clear = () => { try { localStorage.removeItem(KEY); } catch (e) {} self.state = null; };
+     
+    self.keepLast = s => { try { localStorage.setItem(LAST, JSON.stringify(s || {})); } catch (e) {} };
+    self.last = () => { try { return JSON.parse(localStorage.getItem(LAST) || 'null'); } catch (e) { return null; } };
     return self;
   }
 
@@ -1250,7 +1275,9 @@ body.rp-page{ margin:0; background:var(--bg); }
     });
 
     let S = store.state;
-    if (!S || !S.qs || S.lesson !== lesson.lesson_id) { S = store.open(fresh()); }
+    const ended = S && (S.screen === 'result' || S.screen === 'win');
+    if (ended) store.keepLast(S);
+    if (!S || !S.qs || S.lesson !== lesson.lesson_id || ended) { S = store.open(fresh()); }
 
     const q = () => (S.qs || [])[S.i || 0] || {};
     const team = () => (S.teams || [])[S.turn || 0] || {};
@@ -1258,14 +1285,14 @@ body.rp-page{ margin:0; background:var(--bg); }
 
     let menuOpen = false;
 
-    function shell(inner, primary) {
+    function shell(inner, primary, secondary) {
       root.innerHTML = `<div class="pv" id="pv"></div>
         <button class="pm-open" data-a="menu" aria-expanded="${menuOpen}" aria-label="أدوات الحصة">⋯</button>
         <div class="pm"${menuOpen ? '' : ' hidden'}>
           <a class="pm-item" href="${host.ROUTES.hub}">لوحة الحصة</a>
           <button class="pm-item" data-a="result">النتيجة</button>
           <button class="pm-item" data-a="pause">أوقف</button>
-          <button class="pm-item pm-x" data-a="menu">إغلاق</button>
+          <button class="pm-item pm-x" data-a="menu">✕ إغلاق</button>
         </div>`;
       const pv = root.querySelector('#pv');
       inner(pv);
@@ -1275,7 +1302,10 @@ body.rp-page{ margin:0; background:var(--bg); }
       if (primary) {
         const stage = pv.querySelector('.tv-stage') || pv.querySelector('.tr-inner') || pv;
         stage.insertAdjacentHTML('beforeend',
-          `<button class="tv-next" data-a="${primary.a}">${primary.label}</button>`);
+          `<div class="tv-acts">` +
+          `<button class="tv-next" data-a="${primary.a}">${primary.label}</button>` +
+          (secondary ? `<button class="tv-next tv-next2" data-a="${secondary.a}">${secondary.label}</button>` : '') +
+          `</div>`);
       }
       root.querySelectorAll('[data-a]').forEach(b => {
         if (b.tagName === 'A') return;
@@ -1306,10 +1336,11 @@ body.rp-page{ margin:0; background:var(--bg); }
       }
 
       if (S.screen === 'result') {
+         
         return shell(pv => {
           pv.className = 'pv tr ds';
           TV.renderResult(pv, TV.resultFrom(S.picks, lesson, S.qs), { surface: 'student' });
-        }, { a: 'report-open', label: 'احفظ التقرير' });
+        }, { a: 'report-open', label: 'احفظ التقرير' }, { a: 'again', label: 'حصّة جديدة' });
       }
 
       if (S.screen === 'win') {
@@ -1414,6 +1445,11 @@ body.rp-page{ margin:0; background:var(--bg); }
       }
 
       if (a === 'menu') { menuOpen = !menuOpen; return draw(); }
+      if (a === 'again') {
+        if (!G.confirm('بدء حصّة جديدة؟ تُحفظ نتيجة هذه الحصة للتقرير.')) return;
+        store.keepLast(S); menuOpen = false;
+        S = store.open(fresh()); return draw();
+      }
       if (a === 'result') { menuOpen = false; return set({ screen: 'result' }); }
       if (a === 'report-open') return host.go('report');
       if (a === 'pause') {
@@ -1458,17 +1494,13 @@ body.rp-page{ margin:0; background:var(--bg); }
      
     document.body.classList.add('ref');
     root.innerHTML = `<div class="pv" id="pv"></div>
-      <nav class="pb"><a class="pb-home" href="index.html">‹ لوحة الحصة</a>
-        <button class="pb-go">التالي</button>
-        <span class="pb-minor"><button class="pb-btn">أوقف</button>
-          <button class="pb-btn">النتيجة</button></span></nav>`;
-    const rootEl = root;
+      <button class="pm-open" aria-label="أدوات الحصة">⋯</button>`;
     root = root.querySelector('#pv');
     root.className = 'pv tv ds';
     if (screen === 'match' || screen === 'match-wrong') {
       const pairs = (lesson.pairs || []).slice(0, 5), cards = [];
       pairs.forEach((pr, i) => { cards.push({ p: i, t: pr.a }); cards.push({ p: i, t: pr.b }); });
-      return SHIFT.tv.renderMatch(root, {
+      return (SHIFT.tv.renderMatch(root, {
         crumb: lesson.title, step: SHIFT.tv.matchStep(1, pairs.length),
         turn: { name: 'دور اللؤلؤ', color: 'var(--t1)' }, q: SHIFT.contract.MAP.match.lead, cols: 5,
         cards: cards.slice(0, 2).concat(cards.slice(4)).map((c, i) => ({ text: c.t,
@@ -1477,7 +1509,7 @@ body.rp-page{ margin:0; background:var(--bg); }
         faceUp: cards.slice(0, 2).map((c, i) => ({ key: SHIFT.tv.KEY10[i], text: c.t })),
         scores: TEAMS.map((t, i) => Object.assign({}, t, { now: i === 0 })),
         moment: screen === 'match-wrong' ? 'wrong' : 'ask',
-      });
+      }), acts('التالي'));
     }
     if (screen === 'win')
       return SHIFT.tv.renderWin(root, { title: 'أحسنتم', line: 'انتهت الحصة',
@@ -1495,17 +1527,28 @@ body.rp-page{ margin:0; background:var(--bg); }
         { q: 0, team: 2, picked: (QS[0] || {}).answer || 0, right: true, obj: (lesson.objectives || [])[0].code },
       ];
       root.className = 'pv tr ds';
-      return SHIFT.tv.renderResult(root, SHIFT.tv.resultFrom(picks, lesson, QS), { surface: 'student' });
+      SHIFT.tv.renderResult(root, SHIFT.tv.resultFrom(picks, lesson, QS), { surface: 'student' });
+      return acts('احفظ التقرير', 'حصّة جديدة');
     }
      
+    const acts = (label, second) => {
+      const stage = root.querySelector('.tv-stage') || root.querySelector('.tr-inner');
+      if (!stage) return;
+      stage.insertAdjacentHTML('beforeend', `<div class="tv-acts">` +
+        `<button class="tv-next">${label}</button>` +
+        (second ? `<button class="tv-next tv-next2">${second}</button>` : '') + `</div>`);
+    };
+
     const i = i0;
-    return SHIFT.tv.render(root, Object.assign(SHIFT.tv.fromQuiz({
+    const painted = SHIFT.tv.render(root, Object.assign(SHIFT.tv.fromQuiz({
       crumb: lesson.title, step: 'سؤال ' + (i + 1) + ' من ' + QS.length,
       turn: { name: 'دور اللؤلؤ', color: 'var(--t1)' }, item: QS[i] || {},
       revealed: screen === 'reveal',
       picked: (((QS[i] || {}).answer || 0) + 1) % ((QS[i] || { options: [1, 2, 3] }).options.length || 3),
       pickedBy: 'اختيار اللؤلؤ', scores: TEAMS.map((t, n) => Object.assign({}, t, { now: n === 0 })),
     }), { pick: screen !== 'reveal' }));
+    if (screen === 'reveal') acts('التالي');
+    return painted;
   }
 
   SHIFT.play.mount(root, { lesson });

@@ -462,11 +462,11 @@
 @media (prefers-reduced-motion: reduce){ .tv-winblock{ animation-duration:1ms } }
 
 .hb{ min-height:100dvh; background:var(--bg); color:var(--ink); font-family:var(--font-text);
-  direction:rtl; display:grid; align-content:start; gap:18px; max-width:34em; margin-inline:auto;
-  padding:calc(env(safe-area-inset-top) + 20px) 16px calc(env(safe-area-inset-bottom) + 28px); }
+  direction:rtl; display:grid; align-content:center; gap:18px; max-width:34em; margin-inline:auto;
+  padding:calc(env(safe-area-inset-top) + 26px) 16px calc(env(safe-area-inset-bottom) + 28px); }
 .hb *{ box-sizing:border-box; }
 
-.hb-logo{ height:44px; width:auto; display:block; margin-block-end:10px; }
+.hb-logo{ height:44px; width:auto; display:block; margin-block:6px 10px; }
 .sadu-band{ height:10px; border-radius:6px; margin-block-start:12px;
   background:repeating-linear-gradient(90deg,
     var(--sadu2) 0 14px, transparent 14px 20px, var(--gold2) 20px 34px, transparent 34px 40px); }
@@ -496,6 +496,9 @@
 .hb-btn{ min-height:52px; display:flex; align-items:center; justify-content:center;
   background:var(--bg); border:2px solid var(--ink); border-radius:var(--r-chip);
   color:var(--ink); font-size:16px; font-weight:800; text-decoration:none; padding:8px 10px; }
+.hb-alt{ min-height:48px; width:100%; font-family:var(--font-text); font-size:15px; font-weight:700;
+  background:none; color:var(--ink2); border:2px dashed var(--line); border-radius:var(--r-chip);
+  padding:8px 12px; cursor:pointer; }
 .hb-guide{ background:var(--paper); border:2px solid var(--line); border-radius:var(--r-card);
   padding:10px 14px; font-size:15px; }
 .hb-guide summary{ min-height:44px; display:flex; align-items:center; font-weight:800; cursor:pointer; }
@@ -574,10 +577,19 @@ body.pg .tv-pick{ margin-block-start:.08em; font-size:var(--tv-label); }
 @media (orientation: portrait), (max-height: 560px){
   body.pg .tv-safe{ aspect-ratio:auto; width:100%; height:100%;
     font-size:max(11px, min(4.44cqh, 4.4cqw)); }
+  
+  body.pg .tv-stage{ align-content:center; justify-items:center; }
   body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
   body.pg .tv-crumb{ display:none; }
   body.pg .tv-foot{ flex-wrap:wrap; max-height:none; row-gap:.25em; }
   body.pg .tv-score{ flex:none; }
+}
+
+@media (orientation: portrait) and (max-width: 560px){
+  body.pg .tv-figure, body.pg .tv-figure2{ display:none; }
+  
+  .pm-open{ inset-block-end:auto; inset-block-start:calc(env(safe-area-inset-top) + 8px); }
+  .pm{ inset-block-end:auto; inset-block-start:calc(env(safe-area-inset-top) + 64px); }
 }
 body.pg button.tv-opt{ min-height:max(44px, 1.5em); }
 body.pg .tv-opts{ gap:.22em; }
@@ -588,30 +600,38 @@ body.pg .tv-foot{ flex-wrap:wrap; max-height:none; row-gap:.25em; }
 body.pg .tv-score{ flex:none; }
 
 .pm-open{ position:fixed; inset-block-end:calc(env(safe-area-inset-bottom) + 10px);
-  inset-inline-start:10px; z-index:30; min-width:48px; min-height:48px; border-radius:999px;
+  inset-inline-start:10px; z-index:30; width:48px; height:48px; border-radius:999px;
   border:2px solid var(--line); background:var(--paper); color:var(--ink2);
   font-family:var(--font-text); font-size:20px; font-weight:800; line-height:1; cursor:pointer;
   opacity:.75; transition:transform 90ms cubic-bezier(.2,.8,.3,1), opacity 150ms; }
 .pm-open:hover{ opacity:1; }
 .pm-open.press{ transform:scale(.94); opacity:1; }
 .pm[hidden]{ display:none; }
+
 .pm{ position:fixed; inset-block-end:calc(env(safe-area-inset-bottom) + 66px);
-  inset-inline-start:10px; z-index:31; display:grid; gap:6px; min-width:180px;
-  background:var(--paper); border:2px solid var(--line); border-radius:var(--r-card);
-  padding:8px; box-shadow:0 6px 24px rgba(0,0,0,.18); }
+  inset-inline-start:10px; z-index:31; display:grid; gap:6px; min-width:196px;
+  background:var(--ink); border:2px solid var(--ink); border-radius:var(--r-card);
+  padding:10px; box-shadow:0 8px 28px rgba(0,0,0,.28); }
+.pm::before{ content:''; display:block; height:6px; border-radius:4px; margin-block-end:4px;
+  background:repeating-linear-gradient(90deg,
+    var(--sadu2) 0 10px, transparent 10px 14px, var(--gold2) 14px 24px, transparent 24px 28px); }
 .pm-item{ min-height:48px; display:flex; align-items:center; justify-content:center;
   font-family:var(--font-text); font-size:16px; font-weight:800; text-decoration:none;
-  background:var(--bg); color:var(--ink); border:2px solid var(--line);
+  background:var(--paper); color:var(--ink); border:2px solid var(--paper);
   border-radius:var(--r-chip); padding:6px 12px; cursor:pointer; }
-.pm-item.pm-x{ background:none; color:var(--ink2); font-weight:700; }
+.pm-item.pm-x{ background:none; color:var(--paper); border-color:rgba(251,246,236,.45);
+  font-weight:700; font-size:15px; min-height:44px; }
 
 .tv-stage{ position:relative; }
-.tv-next{ position:absolute; inset-block-end:0; inset-inline-start:0; min-height:max(44px, 1.3em);
+
+.tv-acts{ position:absolute; inset-block-end:0; inset-inline-end:0; display:flex; gap:.4em; align-items:center; }
+.tv-next{ min-height:max(44px, 1.3em);
   font-family:var(--font-text); font-size:.72em; font-weight:800;
   background:var(--paper); color:var(--ink); border:.08em solid var(--ink);
   border-radius:var(--r-card); padding:.25em 1.4em; cursor:pointer;
   box-shadow:0 .08em 0 var(--line); transition:transform 90ms cubic-bezier(.2,.8,.3,1); }
 .tv-next.press{ transform:scale(.97); }
+.tv-next2{ background:var(--bg); color:var(--ink2); border-color:var(--line); }
 
 .st-logo{ height:2.2em; width:auto; margin-block-end:.3em; }
 .tv-start .tv-q{ font-family:var(--font-display); max-width:18em; }
@@ -880,12 +900,68 @@ body.rp-page{ margin:0; background:var(--bg); }
 })();
 
 </script>
+<script>
+(function () {
+  const KEY = 'shift.session.v1';
+  const LAST = 'shift.session.last.v1';
+
+  function read() {
+    try { return JSON.parse(localStorage.getItem(KEY) || 'null'); }
+    catch (e) { console.warn('SHIFT: تعذّرت قراءة الحالة —', e && e.message); return null; }
+  }
+
+  function write(s) {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(s));
+       
+      const back = JSON.parse(localStorage.getItem(KEY) || 'null');
+      return !!back && back.at === s.at;
+    } catch (e) { console.warn('SHIFT: تعذّر حفظ الحالة —', e && e.message); return false; }
+  }
+
+  function Store() {
+    const self = { state: read() };
+    self.open = init => { self.state = Object.assign({ at: Date.now() }, init || {}); write(self.state); return self.state; };
+    self.patch = fields => {
+      self.state = Object.assign({}, self.state || {}, fields, { at: Date.now() });
+      return write(self.state);
+    };
+    self.clear = () => { try { localStorage.removeItem(KEY); } catch (e) {} self.state = null; };
+     
+    self.keepLast = s => { try { localStorage.setItem(LAST, JSON.stringify(s || {})); } catch (e) {} };
+    self.last = () => { try { return JSON.parse(localStorage.getItem(LAST) || 'null'); } catch (e) { return null; } };
+    return self;
+  }
+
+  const G = (typeof window !== 'undefined' ? window : globalThis);
+  G.SHIFT = G.SHIFT || {}; G.SHIFT.Store = Store;
+  if (typeof module !== 'undefined' && module.exports) module.exports = Store;
+})();
+
+</script>
 <script>(async function () {
   const el = document.getElementById('hb');
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const lesson = window.__LESSON;   /* مدموج وقت النشر — لا طلب شبكة */
   const engines = (SHIFT.contract.enginesFor(lesson) || []).map(e => e.name).join(' · ');
+
+  const store = SHIFT.Store();
+  const S = store.state || {};
+  const live = S.qs && S.phase && S.phase !== 'idle' && S.screen !== 'result' && S.screen !== 'win';
+  const AR = n => String(n).replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  const goHtml = live
+    ? `<a class="hb-go" href="play.html">
+         <b>استئناف الحصة</b>
+         <span>${S.screen === 'match' ? 'من جولة المطابقة' : 'من سؤال ' + AR((S.i || 0) + 1) + ' من ' + AR(S.total || 6)}
+           — تُكمل من حيث توقّفت.</span>
+       </a>
+       <button class="hb-alt" id="fresh">ابدأ حصّة جديدة بدلاً منها</button>`
+    : `<a class="hb-go" href="play.html">
+         <b>ابدأ الحصة</b>
+         <span>حصّة جديدة على هذه الشاشة: الصفّ يراها وأنت تلمسها. اعرضها على البروجكتر
+           بكابل أو AirPlay — والأفضل أن يكون الجهاز عرضياً.</span>
+       </a>`;
 
   el.innerHTML = `
     <header class="hb-head">
@@ -907,13 +983,7 @@ body.rp-page{ margin:0; background:var(--bg); }
       </div>
     </section>
 
-    <section class="hb-sec">
-      <a class="hb-go" href="play.html">
-        <b>ابدأ الحصة</b>
-        <span>الحصة على هذه الشاشة: الصفّ يراها وأنت تلمسها. اعرضها على البروجكتر
-          بكابل أو AirPlay — والأفضل أن يكون الجهاز عرضياً.</span>
-      </a>
-    </section>
+    <section class="hb-sec" id="go"></section>
 
     <section class="hb-sec">
       <h2>دليل التشغيل</h2>
@@ -933,6 +1003,14 @@ body.rp-page{ margin:0; background:var(--bg); }
         <p><b>بلا إنترنت:</b> بعد فتح الصفحة تعمل الحصة كاملةً بلا شبكة.</p>
       </details>
     </section>`;
+
+  document.getElementById('go').innerHTML = goHtml;
+  const fresh = document.getElementById('fresh');
+  if (fresh) fresh.onclick = () => {
+    if (!confirm('بدء حصّة جديدة؟ تُحفظ نتيجة الحصة الجارية للتقرير.')) return;
+    store.keepLast(store.state); store.clear();
+    location.href = 'play.html';
+  };
 })();
 </script>
 <script>
