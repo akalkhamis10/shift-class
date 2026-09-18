@@ -1067,6 +1067,11 @@ html,body{direction:rtl;margin:0;padding:0;background:#0B1420;overflow:hidden}
          بوابتين لا في القائمة. -->
     <div id="tools">
       <button class="tbtn hit pz" id="bPause" type="button" title="إيقاف مؤقت وإعدادات المعلم" aria-label="إيقاف مؤقت وإعدادات المعلم"><span class="ic">⏸</span><span class="lb">إيقاف</span></button>
+      <!-- **مخرج مسمّى بكلمته** (18 سبتمبر 2026): كان الخروج من العدّاء بزرّ رجوع
+           المتصفّح وحده — ولا زرّ رجوع في تطبيق مثبَّت على الشاشة الرئيسية، فيحبس المعلّم
+           في اللعبة أمام الصفّ. موضعه واحد: بجانب «إيقاف»، في كل شاشة لعب. ويبقى مخفيّاً
+           حين لا يكون للعدّاء مدخلٌ يعود إليه (يُنشر وحده أيضاً) — فلا يَعِد بما لا يقع. -->
+      <button class="tbtn hit pz" id="bExit" type="button" hidden title="خروج إلى المدخل" aria-label="خروج إلى المدخل"><span class="ic">↩</span><span class="lb">خروج</span></button>
     </div>
 
     <div id="qbar"><span class="rep">إعادة — فرصة ثانية</span><div id="qtext"></div></div>
@@ -1168,6 +1173,18 @@ html,body{direction:rtl;margin:0;padding:0;background:#0B1420;overflow:hidden}
       </div>
       <button class="go hit" id="bResume" type="button">▶ متابعة اللعب</button>
       <button class="go ghost hit" id="bEndNow" type="button">أنهِ الجولة واعرض التقرير</button>
+    </div>
+  </div>
+
+  <!-- ================================================= ورقة الخروج: تأكيد قبل مغادرة اللعبة
+       الخروج بلمسة واحدة وسط الحصة يمحو الجولة أمام الصفّ — فالتأكيد شرط، ونصّه يقول
+       ما يُفقَد بالضبط لا «هل أنت متأكد؟». والبقاء هو الزرّ الأساسي. -->
+  <div class="sheet" id="leave" inert>
+    <div class="card">
+      <h1>خروج <span>من اللعبة</span></h1>
+      <p class="sub">تعود إلى المدخل. الجولة الجارية تنتهي ولا يُعرض تقريرها — وأسئلتك المحفوظة تبقى كما هي.</p>
+      <button class="go hit" id="bStay" type="button">▶ ابقَ في اللعبة</button>
+      <button class="go ghost hit" id="bLeave" type="button">↩ اخرج إلى المدخل</button>
     </div>
   </div>
 
@@ -4851,6 +4868,33 @@ document.getElementById('oTeach').addEventListener('click',()=>setTeach(!G.teach
 document.getElementById('bStart').addEventListener('click',()=>startGame());
 document.getElementById('bAgain').addEventListener('click',()=>startGame());
 document.getElementById('bRetry').addEventListener('click',()=>startGame({retry:true}));
+/* ---- الخروج إلى المدخل ----
+   الوجهة تُشتقّ من المسار لا تُكتب: المنشور `…/runner/index.html` فمدخلُه `../`،
+   والمحلّي `/runner.html` فمدخلُه `index.html`. */
+function exitHref(){ return /\/runner\/(index\.html)?$/.test(location.pathname) ? '../' : 'index.html'; }
+(function(){
+  const b=document.getElementById('bExit'); if(!b) return;
+  /* لا يظهر إلا إذا جاء من المدخل — وإلا فلا مكان يعود إليه.
+     والعلامة في تخزين الجلسة لا في الرابط: عامل الخدمة يطابق العنوان كاملاً بمعاملاته. */
+  let from=''; try{ from=sessionStorage.getItem('shift.entry.v1')||''; }catch(e){ from=''; }
+  if(!from) return;
+  b.hidden=false;
+  /* **ورقة واحدة على الشاشة لا ورقتان**: الخروج يوقف الجولة (وإلا ركض العدّاء والسؤالُ
+     معلّق خلف الورقة)، لكنّ ورقة الإيقاف تُخفى فلا تطلّ من تحت ورقة الخروج. وإن كان
+     المعلّم موقِفاً أصلاً، «ابقَ» يعيده إلى إيقافه لا إلى اللعب. */
+  let wasPaused=false;
+  b.addEventListener('click',()=>{
+    wasPaused=!!G.paused;
+    if(!wasPaused) setPause(true);
+    setSheet('pause',false);
+    setSheet('leave',true);
+  });
+  document.getElementById('bStay').addEventListener('click',()=>{
+    setSheet('leave',false);
+    if(wasPaused) setSheet('pause',true); else setPause(false);
+  });
+  document.getElementById('bLeave').addEventListener('click',()=>{ location.href=exitHref(); });
+})();
 document.getElementById('bPause').addEventListener('click',()=>setPause(!G.paused));
 document.getElementById('bResume').addEventListener('click',()=>setPause(false));
 document.getElementById('bEndNow').addEventListener('click',()=>{

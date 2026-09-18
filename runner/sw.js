@@ -1,7 +1,7 @@
-/* SHIFT — النموذج · نسخة de2b5ee0 */
+/* SHIFT — النموذج · نسخة c771927c */
 /* **السياسة نفسها** التي في نسخة النشر (`build-site.mjs`): مخزَّن أولاً وتحديث في
    الخلفية. لا سياسة جديدة — نُقلت كما هي ليبقى سلوك التعافي واحداً. */
-const CACHE = 'shift-runner-de2b5ee0';
+const CACHE = 'shift-runner-c771927c';
 const FILES = ['./', './index.html', './manifest.webmanifest',
   './favicon.ico', './apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', e => {
@@ -14,7 +14,9 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(hit => {
+  /* **التطابق يتجاهل معاملات الرابط**: رابطٌ يصل بـ`?v=2` أو `?utm=…` كان يخطئ
+     المخزَّن فيسقط بلا شبكة، والمُرجَع حينها `undefined` لا صفحة. */
+  e.respondWith(caches.match(e.request, { ignoreSearch: true }).then(hit => {
     const net = fetch(e.request).then(res => {
       if (res && res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
       return res;

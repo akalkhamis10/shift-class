@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="SHIFT">
 <meta property="og:locale" content="ar_KW">
 <meta property="og:title" content="حوّل أسئلتك إلى مسابقة على شاشة الفصل">
-<meta property="og:description" content="الصق أسئلتك… والعب. في دقيقة تصير مسابقة فِرَق على شاشة الفصل، من جوالك.">
+<meta property="og:description" content="الصق أسئلتك… والعب. في دقيقة تصير مسابقة فِرَق على شاشة الفصل، من موبايلك.">
 <meta property="og:url" content="https://akalkhamis10.github.io/shift-class/">
 <meta property="og:image" content="https://akalkhamis10.github.io/shift-class/kw/og-card.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -300,16 +300,31 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     const raw = String(text || '').replace(/\r/g, '');
      
     const lines = raw.split('\n').map(l => l.trim());
-    const blocks = []; let cur = [];
+    const isQ = l => /[؟?]\s*$/.test(l);
+    let blocks = [], cur = [];
     const flush = () => { if (cur.length) blocks.push(cur); cur = []; };
     for (const l of lines) {
       if (!l) { flush(); continue; }
-      if (/[؟?]\s*$/.test(l) && cur.length >= 3) flush();
+      if (isQ(l) && cur.length >= 3) flush();
       cur.push(l);
     }
     flush();
 
+    let head = [];
+    const usable = blocks.filter(b => b.length >= 3).length;
+    if (blocks.length && usable * 2 < blocks.length && lines.some(isQ)) {
+      blocks = []; cur = []; head = [];
+      for (const l of lines) {
+        if (!l) continue;                                    
+        if (isQ(l)) { flush(); cur.push(l); continue; }
+        if (!cur.length && !blocks.length) { head.push(l); continue; }
+        cur.push(l);
+      }
+      flush();
+    }
+
     const items = [], problems = [], dropped = [];
+    if (head.length) problems.push('تُرك ما قبل أول سؤال (' + head.length + (head.length === 1 ? " سطر): «" : " أسطر), أوّلها: «") + head[0].slice(0, 26) + '».');
     blocks.forEach((b, i) => {
       const q = stripBullet(stripNum(b[0]));
       const short = q.length > 26 ? q.slice(0, 26) + '…' : q;
@@ -449,7 +464,7 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
   function vHome() {
     const mine = B.list();
     return top('الصق أسئلتك… والعب!',
-      'في دقيقة تصير مسابقة فِرَق على شاشة الفصل، من جوالك.') + `
+      'في دقيقة تصير مسابقة فِرَق على شاشة الفصل، من موبايلك.') + `
       <div class="sea-body">
         ${mine.length ? `
         <section class="sea-sec">
@@ -462,8 +477,9 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
         </section>` : ''}
         <section class="sea-sec">
           ${mine.length ? '<h2 class="sea-h2">أو الصق أسئلة جديدة</h2>' : ''}
-          <textarea id="paste" class="sea-field" placeholder="السؤال في سطر، وتحته كل إجابة في سطر، وسطر فارغ بين سؤال وآخر."></textarea>
-          <p class="sea-hint">ثلاثة خيارات تعمل في كل المسابقات. وتكفي إجابتان لسؤال صح/خطأ.</p>
+          
+          <textarea id="paste" class="sea-field" placeholder="اكتب السؤال في سطر، وتحته كل إجابة في سطر. والصحيحة تحدّدها بإصبعك بعد اللصق."></textarea>
+          <p class="sea-hint">اكتب ثلاث إجابات لكل سؤال — تعمل في كل المسابقات. وإجابتان تكفيان لصح/خطأ.</p>
           <div class="sea-acts">
             <button class="sea-btn sea-btn-main" id="make">${ICON.play}اصنع المسابقة</button>
             <button class="sea-btn sea-btn-plain" id="demo">جرّب بأسئلة جاهزة</button>
@@ -591,6 +607,8 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       if (!B.ready(S.items).filter(it => B.fits(it, key)).length) return;
       if (!S.savedId) { const r = B.save(S.title || 'أسئلتي', B.ready(S.items)); if (r.ok) S.savedId = r.id; }
       SHIFT.Store.pickBank(S.savedId, key);
+       
+      try { sessionStorage.setItem('shift.entry.v1', '1'); } catch (e) { console.warn('SHIFT: تعذّرت علامة المدخل —', e && e.message); }
       location.href = key === 'runner' ? 'runner/index.html' : 'play.html';
     });
   }

@@ -652,11 +652,18 @@ body.pg button.tv-opt{ min-height:max(44px, 1.5em); }
 body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
 body.pg .tv-crumb{ display:none; }
 
-.pm-open{ flex:none; width:44px; height:44px; border-radius:999px;
-  border:0; background:transparent; color:var(--ink2);
-  font-family:var(--font-text); font-size:19px; font-weight:800; line-height:1; cursor:pointer;
-  opacity:.4; transition:opacity 150ms, transform 90ms cubic-bezier(.2,.8,.3,1); }
-.pm-open:hover{ opacity:.8; }
+.pm-open{ flex:none; min-height:44px; padding:0 14px; border-radius:999px;
+  border:2px solid currentColor; background:transparent; color:var(--ink2);
+  font-family:var(--font-text); font-size:15px; font-weight:800; line-height:1;
+  white-space:nowrap; cursor:pointer;
+  opacity:.62; transition:opacity 150ms, transform 90ms cubic-bezier(.2,.8,.3,1); }
+.pm-open:hover{ opacity:.9; }
+
+.tv-top .pm-open{ flex:none; white-space:nowrap;
+  
+  margin-block:-2px; }
+
+.tv-acts .pm-open{ font-size:13px; padding:0 10px; }
 .pm-open.press{ transform:scale(.94); opacity:.9; }
 .pm[hidden]{ display:none; }
 
@@ -1530,16 +1537,31 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     const raw = String(text || '').replace(/\r/g, '');
      
     const lines = raw.split('\n').map(l => l.trim());
-    const blocks = []; let cur = [];
+    const isQ = l => /[؟?]\s*$/.test(l);
+    let blocks = [], cur = [];
     const flush = () => { if (cur.length) blocks.push(cur); cur = []; };
     for (const l of lines) {
       if (!l) { flush(); continue; }
-      if (/[؟?]\s*$/.test(l) && cur.length >= 3) flush();
+      if (isQ(l) && cur.length >= 3) flush();
       cur.push(l);
     }
     flush();
 
+    let head = [];
+    const usable = blocks.filter(b => b.length >= 3).length;
+    if (blocks.length && usable * 2 < blocks.length && lines.some(isQ)) {
+      blocks = []; cur = []; head = [];
+      for (const l of lines) {
+        if (!l) continue;                                    
+        if (isQ(l)) { flush(); cur.push(l); continue; }
+        if (!cur.length && !blocks.length) { head.push(l); continue; }
+        cur.push(l);
+      }
+      flush();
+    }
+
     const items = [], problems = [], dropped = [];
+    if (head.length) problems.push('تُرك ما قبل أول سؤال (' + head.length + (head.length === 1 ? " سطر): «" : " أسطر), أوّلها: «") + head[0].slice(0, 26) + '».');
     blocks.forEach((b, i) => {
       const q = stripBullet(stripNum(b[0]));
       const short = q.length > 26 ? q.slice(0, 26) + '…' : q;
@@ -1689,7 +1711,7 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     function shell(inner, primary, secondary) {
       root.innerHTML = `<div class="pv" id="pv"></div>
         <div class="pm"${menuOpen ? '' : ' hidden'}>
-          <a class="pm-item" href="${host.ROUTES.hub}">لوحة الحصة</a>
+          <button class="pm-item" data-a="leave">خروج إلى لوحة الحصة</button>
           <button class="pm-item" data-a="result">النتيجة</button>
           <button class="pm-item" data-a="pause">أوقف</button>
           <span class="pm-seed">بذرة الحصة: ${(S && S.seed) || '—'}</span>
@@ -1716,13 +1738,21 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       return foot;
     }
 
+    function menuBtn() {
+      return `<button class="pm-open" data-a="menu" aria-expanded="${menuOpen}">أدوات الحصة</button>`;
+    }
+
     function actsRow(pv, primary, secondary) {
       const row = document.createElement('div');
       row.className = 'tv-acts';
+       
+      const topEl = pv.querySelector('.tv-top');
+      const top = (topEl && topEl.children.length) ? topEl : null;
+      if (top) top.insertAdjacentHTML('beforeend', menuBtn());
       row.innerHTML =
         (primary ? `<button class="tv-next" data-a="${primary.a}">${primary.label}</button>` : '') +
         (secondary ? `<button class="tv-next tv-next2" data-a="${secondary.a}">${secondary.label}</button>` : '') +
-        `<button class="pm-open" data-a="menu" aria-expanded="${menuOpen}" aria-label="أدوات الحصة">⋯</button>`;
+        (top ? '' : menuBtn());
       bottomOf(pv).appendChild(row);
       return document.createDocumentFragment();
     }
@@ -1864,6 +1894,11 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
         store.keepLast(S); menuOpen = false;
         S = store.open(fresh()); return draw();
       }
+      if (a === 'leave') {
+         
+        if (!G.confirm('الخروج إلى لوحة الحصة؟ الحصة الجارية تنتهي ولا يُعرض تقريرها — والأسئلة المحفوظة تبقى.')) return;
+        menuOpen = false; return host.go('hub');
+      }
       if (a === 'result') { menuOpen = false; return set({ screen: 'result' }); }
       if (a === 'report-open') return host.go('report');
       if (a === 'pause') {
@@ -1925,10 +1960,13 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       if (safe) { for (const el of safe.children) if (el.classList.contains('tv-foot')) { foot = el; break; } }
       if (safe && !foot) { foot = document.createElement('div'); foot.className = 'tv-foot'; safe.appendChild(foot); }
       const host = foot || root.querySelector('.tr-inner') || root;
+      const topEl = root.querySelector('.tv-top');
+      const topBar = (topEl && topEl.children.length) ? topEl : null;    
+      if (topBar) topBar.insertAdjacentHTML('beforeend', `<button class="pm-open">أدوات الحصة</button>`);
       host.insertAdjacentHTML('beforeend', `<div class="tv-acts">` +
         (label ? `<button class="tv-next">${label}</button>` : '') +
         (second ? `<button class="tv-next tv-next2">${second}</button>` : '') +
-        `<button class="pm-open" aria-label="أدوات الحصة">⋯</button>` + `</div>`);
+        (topBar ? '' : `<button class="pm-open">أدوات الحصة</button>`) + `</div>`);
     };
 
     root.innerHTML = `<div class="pv" id="pv"></div>`;

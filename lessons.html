@@ -653,11 +653,18 @@ body.pg button.tv-opt{ min-height:max(44px, 1.5em); }
 body.pg .tv-top{ flex-wrap:wrap; max-height:none; row-gap:.25em; justify-content:center; }
 body.pg .tv-crumb{ display:none; }
 
-.pm-open{ flex:none; width:44px; height:44px; border-radius:999px;
-  border:0; background:transparent; color:var(--ink2);
-  font-family:var(--font-text); font-size:19px; font-weight:800; line-height:1; cursor:pointer;
-  opacity:.4; transition:opacity 150ms, transform 90ms cubic-bezier(.2,.8,.3,1); }
-.pm-open:hover{ opacity:.8; }
+.pm-open{ flex:none; min-height:44px; padding:0 14px; border-radius:999px;
+  border:2px solid currentColor; background:transparent; color:var(--ink2);
+  font-family:var(--font-text); font-size:15px; font-weight:800; line-height:1;
+  white-space:nowrap; cursor:pointer;
+  opacity:.62; transition:opacity 150ms, transform 90ms cubic-bezier(.2,.8,.3,1); }
+.pm-open:hover{ opacity:.9; }
+
+.tv-top .pm-open{ flex:none; white-space:nowrap;
+  
+  margin-block:-2px; }
+
+.tv-acts .pm-open{ font-size:13px; padding:0 10px; }
 .pm-open.press{ transform:scale(.94); opacity:.9; }
 .pm[hidden]{ display:none; }
 

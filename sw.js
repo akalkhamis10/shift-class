@@ -1,5 +1,5 @@
-/* SHIFT — حصة صفّية · نسخة bcf7d2b6 */
-const CACHE = 'shift-class-bcf7d2b6';
+/* SHIFT — حصة صفّية · نسخة d0f7b3dd */
+const CACHE = 'shift-class-d0f7b3dd';
 const FILES = ['./', './index.html', './play.html', './report.html', './lessons.html',
   './fonts-sea.css', './figures.js', './lessons-figures.js', './manifest.webmanifest',
   "./kw/bg-classroom.webp","./kw/boy-happy-lg.webp","./kw/boy-happy-sm.webp","./kw/girl-happy-lg.webp","./kw/girl-happy-sm.webp","./kw/girl-thinking-lg.webp","./kw/girl-thinking-sm.webp","./kw/og-card.jpg","./kw/pack.js","./kw/teacher-main-lg.webp","./kw/teacher-main-sm.webp",
@@ -14,7 +14,9 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(hit => {
+  /* **التطابق يتجاهل معاملات الرابط**: رابطٌ يصل بـ?v=2 أو ?utm=… من واتساب كان
+     يخطئ المخزَّن فيسقط بلا شبكة، والمُرجَع حينها undefined لا صفحة. */
+  e.respondWith(caches.match(e.request, { ignoreSearch: true }).then(hit => {
     const net = fetch(e.request).then(res => {
       if (res && res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
       return res;
