@@ -1,6 +1,8 @@
-/* SHIFT — حصة صفّية · نسخة df6adda3 */
-const CACHE = 'shift-class-df6adda3';
-const FILES = ['./', './index.html', './play.html', './report.html', './manifest.webmanifest',
+/* SHIFT — حصة صفّية · نسخة bcf7d2b6 */
+const CACHE = 'shift-class-bcf7d2b6';
+const FILES = ['./', './index.html', './play.html', './report.html', './lessons.html',
+  './fonts-sea.css', './figures.js', './lessons-figures.js', './manifest.webmanifest',
+  "./kw/bg-classroom.webp","./kw/boy-happy-lg.webp","./kw/boy-happy-sm.webp","./kw/girl-happy-lg.webp","./kw/girl-happy-sm.webp","./kw/girl-thinking-lg.webp","./kw/girl-thinking-sm.webp","./kw/og-card.jpg","./kw/pack.js","./kw/teacher-main-lg.webp","./kw/teacher-main-sm.webp",
   './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

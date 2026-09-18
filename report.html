@@ -258,6 +258,9 @@
 .tv-opt[data-state="wrong"]{ background:var(--sadu-soft); color:var(--sadu-ink); border-color:var(--sadu2); }
 .tv-opt[data-state="wrong"] .k{ background:var(--sadu2); color:#fff; }
 
+.tv-opt[data-state="wrong-pick"]{ background:var(--sadu2); color:#fff; border-color:var(--sadu-ink); }
+.tv-opt[data-state="wrong-pick"] .k{ background:#fff; color:var(--sadu2); }
+
 .tv-foot{ flex:none; display:flex; align-items:center; justify-content:center;
   flex-wrap:wrap; column-gap:16px; row-gap:.3em; min-height:1.6em; }
 
@@ -287,7 +290,9 @@
   height:20%; pointer-events:none; z-index:0;
   animation:tv-enter 250ms cubic-bezier(.2,.8,.3,1) both;
 }
-.tv-figure img{ filter:drop-shadow(0 .06em 0 var(--shade-soft)); }
+
+.tv-figure img{ filter:drop-shadow(4px 4px 0 #0b3c49); }
+.tv-winfig{ filter:drop-shadow(4px 4px 0 #0b3c49); }
 
 .tv-figure[data-moment="right"]{
   
@@ -471,7 +476,19 @@
 .tv-winblock{ display:flex; align-items:center; justify-content:center; gap:.8em; width:100%;
   animation:tv-enter 250ms cubic-bezier(.2,.8,.3,1) both; }
 .tv-wintext{ display:grid; justify-items:center; gap:.1em; min-width:0; }
-.tv-winfig{ height:7em; width:auto; flex:none; max-width:22%; object-fit:contain; }
+
+.tv-winfig{ height:57dvh; width:auto; flex:none; max-width:26%; object-fit:contain;
+  align-self:flex-end; }
+
+.tv-win .tv-stage .tv-foot{ margin-block-start:.6em; }
+
+.tv-win{ --paper:#fbf3e4; --ink:#0b3c49; background:#fbf3e4; color:#0b3c49; }
+.tv-win .tv-q{ color:#0b3c49; }
+
+@media (max-height:460px){
+  .tv-winfig{ height:44dvh; max-width:22%; }
+  .tv-win .tv-stage .tv-foot{ margin-block-start:.35em; }
+}
 @media (prefers-reduced-motion: reduce){ .tv-winblock{ animation-duration:1ms } }
 
 .hb{ min-height:100dvh; background:var(--bg); color:var(--ink); font-family:var(--font-text);
@@ -549,6 +566,9 @@
 .tr-lure-h{ font-size:var(--tv-label); font-weight:800; color:var(--sadu-ink); margin:0; }
 .tr-lure-t{ font-size:var(--tv-answer); font-weight:800; color:var(--sadu-ink); margin:0; }
 
+.tr-lure-n{ font-size:var(--tv-label); font-weight:700; color:var(--sadu-ink); margin:.1em 0 0; opacity:.85; }
+.tr-count{ font-size:var(--tv-label); font-weight:700; color:var(--ink); margin:.35em 0 0; opacity:.8; }
+
 .tr-do{ font-size:var(--tv-answer); font-weight:800; color:var(--ink);
   background:var(--palm-soft); border-radius:var(--r-card); padding:.3em .8em; max-width:26em; margin:0; }
 
@@ -563,6 +583,7 @@
 .tr-phone .tr-lure{ padding:10px 12px; max-width:none; }
 .tr-phone .tr-lure-h{ font-size:14px; }
 .tr-phone .tr-lure-t{ font-size:19px; }
+.tr-phone .tr-lure-n,.tr-phone .tr-count{ font-size:14px; }
 .tr-phone .tr-do{ font-size:18px; padding:10px 12px; max-width:none; }
 
 body.pg{ margin:0; height:100dvh; background:var(--bg); overflow:hidden; }
@@ -670,7 +691,8 @@ button.tv-opt{ width:100%; font-family:var(--font-text); cursor:pointer;
   min-height:max(44px, 1.9em); text-align:start; }
 button.tv-opt[disabled]{ opacity:1; cursor:default; }
 button.tv-opt.press{ transform:scale(.99); }
-button.tv-card{ font-family:var(--font-text); cursor:pointer; min-width:44px; min-height:44px; }
+
+button.tv-card{ font-family:var(--font-text); font-size:inherit; cursor:pointer; min-width:44px; min-height:44px; }
 button.tv-card[disabled]{ opacity:1; cursor:default; }
 button.tv-card.press{ transform:scale(.96); }
 
@@ -686,6 +708,7 @@ body.rp-page{ margin:0; background:var(--bg); }
 .rp-k{ font-size:13px; font-weight:700; color:var(--ink2); }
 .rp-v{ font-size:19px; font-weight:800; line-height:1.35; }
 .rp-lure{ color:var(--sadu-ink); }
+.rp-num{ font-size:19px; font-weight:800; line-height:1.35; }
 .rp-teams{ display:flex; flex-wrap:wrap; gap:8px; }
 .rp-team{ display:inline-flex; align-items:center; gap:6px; background:var(--bg);
   border:2px solid var(--line); border-radius:var(--r-chip); padding:4px 10px; font-size:16px; }
@@ -716,6 +739,83 @@ body.rp-page{ margin:0; background:var(--bg); }
 .tc-cell.on{ background:var(--gold2); border-color:var(--gold2); }
 .tc-cell[disabled]{ background:var(--palm-soft); color:var(--palm-ink); border-color:var(--palm2); opacity:1; }
 
+.en{ min-height:100dvh; background:var(--paper); color:var(--ink);
+  padding:max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  display:flex; flex-direction:column; gap:14px; max-width:44em; margin-inline:auto; }
+.en-head{ display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
+.en-logo{ height:26px; width:auto; }
+.en h1{ font-family:var(--font-display); font-size:clamp(26px,5vw,38px); font-weight:400; margin:0; line-height:1.2; }
+.en-head-sm h1{ font-size:clamp(22px,4vw,30px); }
+.en-lede{ margin:0; font-size:16px; font-weight:600; color:var(--ink); opacity:.8; line-height:1.5; }
+.en-tag{ margin:0; font-size:14px; font-weight:800; color:var(--sadu-ink);
+  background:var(--sadu-soft); border:2px solid var(--sadu2); border-radius:999px; padding:4px 12px; }
+.en-sec{ display:flex; flex-direction:column; gap:10px; }
+.en h2{ font-size:16px; font-weight:800; margin:0; opacity:.7; }
+
+.en-paste{ width:100%; box-sizing:border-box; font:inherit; font-size:17px; line-height:1.6;
+  min-height:8em; padding:12px 14px; border:3px solid var(--ink); border-radius:var(--r-card);
+  background:var(--raised); color:var(--ink); resize:vertical; }
+.en-paste::placeholder{ color:var(--ink); opacity:.45; }
+.en-hint{ margin:0; font-size:14px; font-weight:700; opacity:.65; }
+.en-note{ margin:0; font-size:15px; font-weight:700; color:var(--ink);
+  background:var(--gold-soft); border:2px solid var(--gold); border-radius:12px; padding:9px 12px; }
+
+.en-acts{ display:flex; flex-wrap:wrap; gap:10px; }
+.en-go,.en-alt{ font:inherit; font-weight:800; min-height:52px; padding:0 22px; border-radius:var(--r-chip);
+  cursor:pointer; flex:1 1 auto; }
+.en-go{ background:var(--palm2); color:#fff; border:3px solid var(--palm2); font-size:19px; }
+.en-alt{ background:var(--paper); color:var(--ink); border:3px solid var(--ink); font-size:17px; }
+.en-go[disabled]{ opacity:.4; cursor:default; }
+.en-link{ font-size:16px; font-weight:800; color:var(--ink); opacity:.75; min-height:44px;
+  display:inline-flex; align-items:center; }
+.en-foot{ margin-block-start:auto; padding-block-start:6px; border-block-start:2px solid var(--line); }
+
+.en-mine{ display:flex; flex-direction:column; gap:10px; }
+.en-game{ font:inherit; text-align:start; display:flex; flex-direction:column; gap:3px;
+  min-height:56px; padding:12px 14px; border:3px solid var(--ink); border-radius:var(--r-card);
+  background:var(--raised); color:var(--ink); cursor:pointer; }
+.en-game b{ font-size:18px; font-weight:800; }
+.en-game span{ font-size:14px; font-weight:700; opacity:.7; }
+.en-game[disabled]{ opacity:.45; cursor:default; }
+.en-fit{ color:var(--palm-ink); opacity:1 !important; font-weight:800 !important; }
+
+.en-qs{ display:flex; flex-direction:column; gap:12px; }
+.en-q{ border:2px solid var(--line); border-radius:var(--r-card); padding:11px 12px;
+  background:var(--raised); display:flex; flex-direction:column; gap:8px; }
+.en-q[data-pending="1"]{ border-color:var(--gold); background:var(--gold-soft); }
+.en-q-t{ font-size:16px; font-weight:800; line-height:1.45; }
+.en-opts{ display:flex; flex-direction:column; gap:6px; }
+.en-opt{ font:inherit; display:flex; align-items:center; gap:9px; text-align:start;
+  min-height:44px; padding:7px 10px; border:2px solid var(--line); border-radius:12px;
+  background:var(--paper); color:var(--ink); cursor:pointer; font-size:16px; font-weight:700; }
+.en-opt .k{ flex:none; width:26px; height:26px; border-radius:50%; background:var(--ground);
+  display:grid; place-items:center; font-size:13px; font-weight:800; }
+.en-opt .t{ min-width:0; overflow-wrap:anywhere; }
+.en-opt[data-on="1"]{ background:var(--palm2); color:#fff; border-color:var(--palm2); }
+.en-opt[data-on="1"] .k{ background:#fff; color:var(--palm2); }
+
+.en-label{ font-size:14px; font-weight:800; opacity:.7; }
+.en-input{ width:100%; box-sizing:border-box; font:inherit; font-size:17px; font-weight:700;
+  min-height:48px; padding:0 12px; border:3px solid var(--ink); border-radius:12px;
+  background:var(--raised); color:var(--ink); }
+.en-warn{ border:2px solid var(--gold); background:var(--gold-soft); border-radius:var(--r-card); padding:10px 12px; }
+.en-warn ul{ margin:0; padding-inline-start:1.1em; display:flex; flex-direction:column; gap:4px; }
+.en-warn li{ font-size:14px; font-weight:700; line-height:1.45; }
+
+.hb-note{ margin:0 0 6px; font-size:14px; font-weight:700; opacity:.7; }
+.hb-back{ font-size:16px; font-weight:800; color:var(--ink); opacity:.75;
+  min-height:44px; display:inline-flex; align-items:center; }
+
+@media (max-height:460px){
+  .en{ gap:10px; padding-block:10px; }
+  
+  .en-paste{ height:4.4em; min-height:0; font-size:16px; }
+  .en h1{ font-size:24px; }
+  .en-lede{ font-size:15px; }
+  .en-logo{ height:22px; }
+  .en-go,.en-alt{ min-height:48px; }
+}
+
 </style>
 </head>
 <body class="rp-page">
@@ -733,9 +833,13 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     match:    { needs: 'pairs',      min: 4, round: 5, tags: ['زوج', 'مفهوم'],        name: 'مطابقة وذاكرة',
                 lead: 'طابق المفهوم بتعريفه' },    
     timeline: { needs: 'sequences',  min: 1, minItems: 4, round: 4, tags: ['تسلسل'],  name: 'ترتيب' },
-    catch:    { needs: 'categories', min: 1, minItems: 6, round: 6, tags: ['فئة'],    name: 'امسك الصحيح' },
+     
+    catch:    { needs: 'categories', min: 1, minItems: 6, minGroups: 3, round: 6, tags: ['فئة'], name: 'امسك الصحيح' },
     map:      { needs: 'places',     min: 4, round: 4, tags: ['خريطة'], name: 'خريطة بلادي', blocked: true },
   };
+
+  C.PLACE_KINDS = ['region', 'point'];
+  C.GEO_KEY = /^[a-z][a-z0-9]*:[^\s:/]+\/[^\s:]+$/;    
 
   C.supply = (lesson, engineId) => {
     const r = C.MAP[engineId]; if (!r || !lesson) return 0;
@@ -754,6 +858,12 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     const n = C.supply(lesson, engineId);
     const need = r.minItems || r.min;
     if (n < need) return { ok: false, why: `يحتاج ${need} على الأقل، والدرس فيه ${n}` , have: n, need };
+     
+    if (r.minGroups) {
+      const g = (lesson[r.needs] || []).length;
+      if (g < r.minGroups)
+        return { ok: false, why: `يحتاج ${r.minGroups} مجموعات على الأقل (جولة لكل فريق)، والدرس فيه ${g}`, have: n, need };
+    }
     return { ok: true, have: n, need, rounds: Math.ceil(n / r.round) };
   };
 
@@ -980,24 +1090,25 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
   const KEY10 = ['أ', 'ب', 'ج', 'د', 'هـ', 'و', 'ز', 'ح', 'ط', 'ي'];
   TV.KEY10 = KEY10;
 
-  const CAST = {
-    start:   ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
-    ask:     ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
-    right:   ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
-    wrong:   ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
-    between: ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
-    win:     ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
-    winAll:  ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='],
+  const MOMENT = {
+    start:   { role: 'teacher', state: 'main' },
+    ask:     { role: 'student', state: 'thinking' },
+    right:   { role: 'student', state: 'happy' },
+    wrong:   { role: 'student', state: 'thinking' },
+    between: { role: 'teacher', state: 'main' },
+    win:     { role: 'student', state: 'happy' },
+    winAll:  { role: 'teacher', state: 'main' },
   };
-  const recent = [];
-  TV.figureFor = function (moment) {
-    const pool = CAST[moment]; if (!pool || !pool.length) return null;
-    const fresh = pool.filter(x => recent.indexOf(x) < 0);
-    const pick = (fresh.length ? fresh : pool)[0];
-    recent.push(pick); while (recent.length > 2) recent.shift();
-    return pick;
+   
+  let turn = 0;
+  TV.figureFor = function (moment, size) {
+    const m = MOMENT[moment]; if (!m) return null;
+    const theme = (typeof SHIFT !== 'undefined' && SHIFT.theme) || null;
+    if (!theme) return null;
+    if (moment === 'right' || moment === 'win') turn++;
+    return theme.figure(m.role, m.state, { n: turn, size: size || 'lg' });
   };
-  TV.CAST = CAST;
+  TV.MOMENT = MOMENT;
 
   TV.render = function (root, vm) {
     vm = vm || {};
@@ -1018,7 +1129,7 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
           (vm.pick ? ` data-a="pick" data-i="${i}"${o.state ? ' disabled' : ''}` : '') + `>` +
           `<span class="k">${KEY[i]}</span>` +
           `<span class="t">${esc(NUM(o.text))}</span>` +
-          (o.state === 'right' || o.state === 'wrong' ? `<span class="mark">${o.state === 'right' ? '✓' : '✗'}</span>` : '') +
+          (o.state === 'right' || o.state === 'wrong' || o.state === 'wrong-pick' ? `<span class="mark">${o.state === 'right' ? '✓' : '✗'}</span>` : '') +
           `</${vm.pick ? 'button' : 'div'}>`
         ).join('')}</div>` : ''}
         ${vm.pickLine ? `<p class="tv-pick">${esc(vm.pickLine)}</p>` : ''}
@@ -1093,7 +1204,9 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       options: (it.options || []).map((t, i) => ({
         text: t,
          
-        state: ctxState.revealed ? (i === it.answer ? 'right' : 'wrong') : '',
+        state: ctxState.revealed
+          ? (i === it.answer ? 'right' : (i === ctxState.picked ? 'wrong-pick' : 'wrong'))
+          : '',
       })),
        
       pickLine: ctxState.revealed && typeof ctxState.picked === 'number' && ctxState.pickedBy
@@ -1107,6 +1220,23 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     };
   };
 
+  TV.verdict = function (teams) {
+    const ts = (teams || []).filter(Boolean);
+    const best = ts.length ? Math.max.apply(null, ts.map(t => Number(t.score) || 0)) : 0;
+    const tops = ts.filter(t => (Number(t.score) || 0) === best);
+     
+    const all = tops.length === ts.length && ts.length > 1;
+    return {
+      best,
+      title: best <= 0 ? 'انتهت الحصة'
+        : tops.length === 1 ? 'فاز فريق ' + tops[0].name
+        : all ? 'تعادل الجميع' : 'تعادل',
+      line: best <= 0 ? 'لم تُسجَّل نقاط'
+        : (tops.length === 1 || all) ? '' : tops.map(t => t.name).join(' و'),
+      isTop: t => best > 0 && (Number(t.score) || 0) === best,
+    };
+  };
+
   TV.renderWin = function (root, vm) {
     vm = vm || {};
     root.className = 'tv ds';
@@ -1115,12 +1245,12 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       <div class="tv-top"></div>
       <div class="tv-stage">
         <div class="tv-winblock">
-          <img class="tv-winfig" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="">
+          ${TV.figureFor('winAll') ? `<img class="tv-winfig" src="${esc(TV.figureFor('winAll'))}" alt="">` : ''}
           <div class="tv-wintext">
             <h1 class="tv-q">${esc(NUM(vm.title || 'أحسنتم'))}</h1>
             ${vm.line ? `<p class="tv-winline">${esc(NUM(vm.line))}</p>` : ''}
           </div>
-          <img class="tv-winfig" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="">
+          ${TV.figureFor('win') ? `<img class="tv-winfig" src="${esc(TV.figureFor('win'))}" alt="">` : ''}
         </div>
         <div class="tv-foot"><div class="tv-teams">${(vm.scores || []).map(s =>
           `<span class="tv-score"${s.top ? ' data-now="1"' : ''}>` +
@@ -1134,7 +1264,9 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
     return root;
   };
 
-  TV.resultFrom = function (picks, lesson, qs) {
+  TV.LURE_MIN = 3;
+
+  TV.resultFrom = function (picks, lesson, qs, teams) {
     picks = picks || []; lesson = lesson || {};
      
     const QSP = qs || lesson.questions || [];
@@ -1151,16 +1283,23 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       const text = q.options[p.picked];
       if (typeof text !== 'string' || !text) return;
       const key = p.q + '|' + p.picked;
-      byWrong[key] = byWrong[key] || { n: 0, q: q.q, text, right: q.options[q.answer], obj: o };
+      byWrong[key] = byWrong[key] || { n: 0, q: q.q, text, right: q.options[q.answer], obj: o, teams: [] };
       byWrong[key].n++;
+       
+      if (typeof p.team === 'number' && byWrong[key].teams.indexOf(p.team) < 0) byWrong[key].teams.push(p.team);
     });
     const objs = Object.keys(byObj).sort((a, b) => byObj[b] - byObj[a]);
     const wrongs = Object.keys(byWrong).sort((a, b) => byWrong[b].n - byWrong[a].n);
     const top = objs[0], w = wrongs[0] ? byWrong[wrongs[0]] : null;
+    const names = (teams || []).map(t => (t && t.name) || '');
+    const who = w ? w.teams.map(i => names[i]).filter(Boolean).join(' و') : '';
     return {
       stumbled: top ? (objText[top] || top) : null,
       stumbledCount: top ? byObj[top] : 0,
-      lure: w, total: picks.length,
+       
+      lure: (w && w.n >= TV.LURE_MIN) ? w : null,
+      pick: (w && w.n < TV.LURE_MIN) ? { text: w.text, n: w.n, who } : null,
+      total: picks.length,
       wrong: picks.filter(p => p && !p.right).length,
     };
   };
@@ -1180,6 +1319,10 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       date: d.getFullYear() + '/' + p2(d.getMonth() + 1) + '/' + p2(d.getDate()),
       stumbled: r && r.stumbled ? quote(r.stumbled) : null,
       lure: r && r.lure && r.lure.text ? quote(r.lure.text) : null,
+      lureN: r && r.lure ? r.lure.n : 0,
+      pick: r && r.pick ? { text: quote(r.pick.text), who: r.pick.who || '' } : null,
+      attempts: (r && r.total) || 0,
+      wrong: (r && r.wrong) || 0,
       scores: (ctx.scores || []).map(t => ({ name: t.name, score: t.score || 0 })),
       action: quote(TV.actionLine(r)),
     };
@@ -1188,7 +1331,9 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
   TV.reportText = rep => [
     'تقرير حصة — ' + rep.title, 'التاريخ: ' + rep.date, '',
     'أكثر ما تعثّر فيه الصفّ: ' + (rep.stumbled || 'لا هدف بعينه'),
-    rep.lure ? 'الخيار الذي جذبهم: «' + rep.lure + '»' : '',
+    rep.lure ? 'الخيار الذي جذبهم: «' + rep.lure + '» (في ' + rep.lureN + ' محاولات)' : '',
+    rep.pick ? (rep.pick.who ? 'إجابة ' + rep.pick.who : 'إجابة فريق واحد') + ': «' + rep.pick.text + '»' : '',
+    'المحاولات المسجّلة: ' + rep.attempts + ' · الخطأ فيها: ' + rep.wrong,
     '', 'نتائج الفِرَق: ' + rep.scores.map(s => s.name + ' ' + s.score).join(' · '),
     '', rep.action, '', 'بلا أسماء طلاب — SHIFT',
   ].filter(x => x !== '').join('\n');
@@ -1202,6 +1347,11 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
         <b class="rp-v">${esc(rep.stumbled || 'لا هدف بعينه')}</b></div>
       ${rep.lure ? `<div class="rp-row"><span class="rp-k">الخيار الذي جذبهم</span>
         <b class="rp-v rp-lure">«${esc(rep.lure)}»</b></div>` : ''}
+      ${rep.pick ? `<div class="rp-row"><span class="rp-k">${esc(rep.pick.who ? 'إجابة ' + rep.pick.who : 'إجابة فريق واحد')}</span>
+        <b class="rp-v rp-lure">«${esc(rep.pick.text)}»</b></div>` : ''}
+      
+      <div class="rp-row"><span class="rp-k">المحاولات المسجّلة</span>
+        <b class="rp-num">${esc(String(rep.attempts))} · الخطأ فيها ${esc(String(rep.wrong))}${rep.lure ? ' · الخيار الجاذب في ' + esc(String(rep.lureN)) : ''}</b></div>
       <div class="rp-row"><span class="rp-k">نتائج الفِرَق</span>
         <span class="rp-teams">${rep.scores.map(s =>
           `<span class="rp-team"><i>${esc(s.name)}</i><b>${esc(String(s.score))}</b></span>`).join('')}</span></div>
@@ -1228,7 +1378,16 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
       ${r.lure ? `<div class="tr-lure">
         <p class="tr-lure-h">الخيار الذي جذبهم</p>
         <p class="tr-lure-t">«${esc(N(r.lure.text))}»</p>
+        ${surface === 'teacher' ? `<p class="tr-lure-n">${esc(N('في ' + r.lure.n + ' محاولات'))}</p>` : ''}
       </div>` : ''}
+      ${r.pick ? `<div class="tr-lure">
+        <p class="tr-lure-h">${esc(r.pick.who ? 'إجابة ' + r.pick.who : 'إجابة فريق واحد')}</p>
+        <p class="tr-lure-t">«${esc(N(r.pick.text))}»</p>
+      </div>` : ''}
+      ${ 
+        surface === 'teacher'
+        ? `<p class="tr-count">${esc(N('المحاولات المسجّلة: ' + (r.total || 0) + ' · الخطأ فيها: ' + (r.wrong || 0)))}</p>`
+        : ''}
       <p class="tr-do">${esc(N(TV.actionLine(r)))}</p>`;
     root.innerHTML = surface === 'teacher'
       ? `<div class="tr-inner">${body}</div>`
@@ -1282,6 +1441,21 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
   };
   Store.picked = () => { try { return localStorage.getItem(PICK) || ''; } catch (e) { return ''; } };
 
+  const BANK = 'shift.play.v1';
+  Store.pickBank = (id, engine) => {
+    try {
+      if (!id) { localStorage.removeItem(BANK); return true; }
+      localStorage.setItem(BANK, JSON.stringify({ id: String(id), engine: String(engine || 'quiz') }));
+      const back = JSON.parse(localStorage.getItem(BANK) || 'null');
+      return !!back && back.id === String(id);
+    } catch (e) { console.warn('SHIFT: تعذّر حفظ اختيار المسابقة —', e && e.message); return false; }
+  };
+  Store.pickedBank = () => {
+    try { const v = JSON.parse(localStorage.getItem(BANK) || 'null'); return (v && v.id) ? v : null; }
+    catch (e) { console.warn('SHIFT: تعذّرت قراءة اختيار المسابقة —', e && e.message); return null; }
+  };
+  Store.clearBank = () => { try { localStorage.removeItem(BANK); return true; } catch (e) { return false; } };
+
   const G = (typeof window !== 'undefined' ? window : globalThis);
   G.SHIFT = G.SHIFT || {}; G.SHIFT.Store = Store;
   if (typeof module !== 'undefined' && module.exports) module.exports = Store;
@@ -1313,13 +1487,14 @@ window.__LESSON = window.__LESSONS["KW-SOC-G5-LOC-01"];</script>
 
 </script>
 <script>(async function () {
+  const LID = (SHIFT.Store.picked() || "KW-SOC-G5-LOC-01").replace(/[^A-Za-z0-9-]/g, '');
   const lesson = window.__LESSONS[LID] || window.__LESSON;   /* مدموج وقت النشر — لا طلب شبكة */
   const el = document.getElementById('rp');
    
   const store = SHIFT.Store();
   const cur = store.state || {};
   const S = (cur.picks && cur.picks.length) ? cur : (store.last() || cur);
-  const rep = SHIFT.tv.reportFrom(SHIFT.tv.resultFrom(S.picks, lesson, S.qs),
+  const rep = SHIFT.tv.reportFrom(SHIFT.tv.resultFrom(S.picks, lesson, S.qs, S.teams),
     { title: lesson.title || 'حصة', scores: S.teams, date: S.startedAt });
   SHIFT.tv.renderReport(el, rep);
   el.querySelector('[data-a="print"]').onclick = () => SHIFT.host.print();

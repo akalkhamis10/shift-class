@@ -1730,8 +1730,39 @@ function bankTrim(it){
            d:[String(it.d[0]).trim().slice(0,BANK_MAXA),
               String(it.d[1]).trim().slice(0,BANK_MAXA)] };
 }
+/* ---------------------------------------------------------- جسر بنك المدخل
+   **مأذون بجسر البنك وحده** (القرار ٣٧ وملحق القرار ٣٥، 18 سبتمبر 2026): قراءة
+   المخزن المشترك وتشغيل **الصالح** من أسئلة المعلّم — ولا بوابات ولا شكل ولا سلوك
+   آخر. البوابات ثلاث كما هي، فشرطُها ثلاثة خيارات كما هو.
+
+   المدخل (`index.html`) يكتب اختياره في `shift.play.v1`، والبنك الموحَّد في
+   `shift.bank.v1` — والسطحان على الأصل نفسه فالمخزن مشترك بلا خادم.
+   وشكل البنك الموحَّد `{q, a:[…], c}` يُحوَّل هنا إلى شكل الرنر `{q, a, d:[خطأ,خطأ]}`
+   بلا مساس بأيّ منهما. وما لا يحمل ثلاثة خيارات **يُترك بصمت هنا** لأن المدخل
+   قاله للمعلّم قبل أن يضغط («٥ من أسئلتك الستّة تعمل في عدّاء الديرة»). */
+function bankFromEntry(){
+  try{
+    const sel=JSON.parse(localStorage.getItem('shift.play.v1')||'null');
+    if(!sel||!sel.id||sel.engine!=='runner') return null;
+    const all=JSON.parse(localStorage.getItem('shift.bank.v1')||'null');
+    const g=all&&Array.isArray(all.games)?all.games.find(x=>x&&x.id===sel.id):null;
+    if(!g||!Array.isArray(g.items)) return null;
+    const out=[];
+    for(const it of g.items){
+      if(!it||typeof it.c!=='number'||it.c<0) continue;
+      const a=Array.isArray(it.a)?it.a:[];
+      if(a.length!==3) continue;                       /* البوابات ثلاث */
+      const wrong=a.filter((_,k)=>k!==it.c);
+      out.push({q:String(it.q||''), a:String(a[it.c]||''), d:[String(wrong[0]||''),String(wrong[1]||'')]});
+    }
+    return out.length?out:null;
+  }catch(e){ console.warn('SHIFT: تعذّرت قراءة بنك المدخل —', e&&e.message); return null; }
+}
 function bankLoad(){
   BANK.list=[];
+  /* أسئلة المدخل تسبق بنك الرنر المحلّي: المعلّم اختار لعبته للتوّ */
+  const fromEntry=bankFromEntry();
+  if(fromEntry){ BANK.list=fromEntry.filter(bankOk).map(bankTrim).slice(0,BANK_MAX); if(BANK.list.length) return; }
   try{
     const raw=localStorage.getItem(BANK_KEY); if(!raw) return;
     const p=JSON.parse(raw);

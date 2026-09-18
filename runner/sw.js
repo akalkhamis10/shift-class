@@ -1,7 +1,7 @@
-/* SHIFT — النموذج · نسخة 483f7156 */
+/* SHIFT — النموذج · نسخة de2b5ee0 */
 /* **السياسة نفسها** التي في نسخة النشر (`build-site.mjs`): مخزَّن أولاً وتحديث في
    الخلفية. لا سياسة جديدة — نُقلت كما هي ليبقى سلوك التعافي واحداً. */
-const CACHE = 'shift-runner-483f7156';
+const CACHE = 'shift-runner-de2b5ee0';
 const FILES = ['./', './index.html', './manifest.webmanifest',
   './favicon.ico', './apple-touch-icon.png', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', e => {
